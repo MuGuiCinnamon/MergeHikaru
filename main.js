@@ -212,32 +212,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return fruitObj;
     }
 
-    // 绘制水果 DOM 元素
+    // 绘制水果 DOM 元素 - 修改后版本
     function drawFruit(type, x, y) {
         const fruitType = CONFIG.fruitTypes[type];
         const fruitEl = document.createElement('div');
-        fruitEl.className = 'fruit';
+        fruitEl.className = `fruit fruit-type-${type}`; // 添加图片类
         fruitEl.style.width = `${fruitType.radius * 2}px`;
         fruitEl.style.height = `${fruitType.radius * 2}px`;
-        fruitEl.style.backgroundColor = fruitType.color;
         fruitEl.style.position = 'absolute';
         fruitEl.style.borderRadius = '50%';
         fruitEl.style.display = 'flex';
         fruitEl.style.alignItems = 'center';
         fruitEl.style.justifyContent = 'center';
-        fruitEl.style.color = 'white';
-        fruitEl.style.fontWeight = 'bold';
-        fruitEl.style.textShadow = '1px 1px 2px rgba(0, 0, 0, 0.5)';
         fruitEl.style.userSelect = 'none';
         fruitEl.style.border = '3px solid rgba(255, 255, 255, 0.3)';
         fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
         
-        // 添加水果名称
-        const fruitName = document.createElement('span');
-        fruitName.textContent = fruitType.name.substring(0, 2);
-        fruitName.style.fontSize = `${Math.max(12, fruitType.radius / 3)}px`;
-        fruitEl.appendChild(fruitName);
+        // 添加背景图片样式
+        fruitEl.style.backgroundSize = 'cover';
+        fruitEl.style.backgroundPosition = 'center';
+        fruitEl.style.backgroundRepeat = 'no-repeat';
         
         return fruitEl;
     }
@@ -293,15 +288,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 更新下一个水果显示
+    // 更新下一个水果显示 - 修改后版本
     function updateNextFruit() {
         const fruitType = CONFIG.fruitTypes[gameState.nextFruitType];
-        nextFruitEl.style.backgroundColor = fruitType.color;
+        
+        // 清空内容，只显示图片
+        nextFruitEl.innerHTML = ''; // 清空可能的文字内容
+        
+        // 设置背景图片
+        nextFruitEl.style.backgroundImage = `url('assets/image/${String(gameState.nextFruitType + 1).padStart(2, '0')}.png')`;
+        nextFruitEl.style.backgroundColor = 'transparent'; // 移除背景色
         nextFruitEl.style.width = `${fruitType.radius}px`;
         nextFruitEl.style.height = `${fruitType.radius}px`;
+        
+        // 确保图片显示正确
+        nextFruitEl.style.backgroundSize = 'cover';
+        nextFruitEl.style.backgroundPosition = 'center';
+        nextFruitEl.style.backgroundRepeat = 'no-repeat';
+        nextFruitEl.style.borderRadius = '50%';
+        nextFruitEl.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+        
         nextFruitEl.setAttribute('data-type', gameState.nextFruitType);
     }
 
     // 生成水果参考表
+    // 生成水果参考表 - 修改后版本
     function generateFruitReference() {
         fruitReferenceList.innerHTML = '';
         
@@ -309,11 +320,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const fruitItem = document.createElement('div');
             fruitItem.className = 'fruit-ref-item';
             
-            fruitItem.innerHTML = `
-                <div class="fruit-ref-icon" style="background-color: ${fruit.color}; width: ${fruit.radius}px; height: ${fruit.radius}px;"></div>
-                <span class="fruit-ref-name">${fruit.name}</span>
-                <span class="fruit-ref-score">${fruit.score}分</span>
+            const iconEl = document.createElement('div');
+            iconEl.className = 'fruit-ref-icon';
+            iconEl.setAttribute('data-type', index); // 设置数据类型
+            iconEl.style.cssText = `
+                width: ${fruit.radius}px;
+                height: ${fruit.radius}px;
+                border-radius: 50%;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-image: url('assets/image/${String(index + 1).padStart(2, '0')}.png');
+                border: 2px solid white;
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
             `;
+            
+            fruitItem.appendChild(iconEl);
+            
+            // 添加水果名称
+            const nameEl = document.createElement('span');
+            nameEl.className = 'fruit-ref-name';
+            nameEl.textContent = fruit.name;
+            
+            // 添加分数
+            const scoreEl = document.createElement('span');
+            scoreEl.className = 'fruit-ref-score';
+            scoreEl.textContent = `${fruit.score}分`;
+            
+            fruitItem.appendChild(nameEl);
+            fruitItem.appendChild(scoreEl);
             
             fruitReferenceList.appendChild(fruitItem);
         });
