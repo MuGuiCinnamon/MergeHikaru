@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合成大遗子</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <main class="game-area">
+            <div class="game-board">
+                <div id="game-canvas"></div>
+                
+                <div class="game-controls">
+                    <button id="restart-btn" class="btn btn-restart">
+                        <i class="fas fa-redo"></i> 重新开始
+                    </button>
+                    <button id="pause-btn" class="btn btn-pause">
+                        <i class="fas fa-pause"></i> 暂停
+                    </button>
+                    <button id="sound-btn" class="btn btn-sound">
+                        <i class="fas fa-volume-up"></i> 音效
+                    </button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <div class="game-info">
+                    <div class="next-fruit-container">
+                        <span class="next-label">下一个:</span>
+                        <div id="next-fruit" class="next-fruit" data-type="0"></div>
+                    </div>
+                    <div class="score-container">
+                        <span class="score-label">分数:</span>
+                        <span id="score" class="score-value">0</span>
+                    </div>
+                    <div class="level-container">
+                        <span class="level-label">目标:</span>
+                        <span id="target-fruit" class="target-fruit">？？？</span>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-info-circle"></i> 游戏说明</h2>
+                <ul>
+                    <li>移动：
+                        <i class="fa-solid fa-computer-mouse"></i>，
+                        <i class="fa-solid fa-up-long"></i>
+                        <i class="fa-solid fa-down-long"></i>
+                        <i class="fa-solid fa-left-long"></i>
+                        <i class="fa-solid fa-right-long"></i>
+                    </li> 
+                    <li>控制下落的<strong>遗子碎片</strong>，将其放置在合适的位置</li>
+                    
+                    <li>当两个<strong>相同的碎片</strong>接触时，会合成一个更大的遗子碎片</li>
+                    <li>如果碎片堆到顶部的红色丝线，遗子被切开，游戏结束</li>
+                </ul>
+                
+                
+                <div class="fruit-reference">
+                    <h3><i class="fa-solid fa-eye"></i></i> 合成表</h3>
+                    <div id="fruit-reference-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <div id="game-over" class="game-over-modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-trophy"></i> 游戏结束!</h2>
+                <p class="final-score">最终得分: <span id="final-score">0</span></p>
+                <p class="highest-score">最高分: <span id="highest-score">0</span></p>
+                <div class="fruit-stats">
+                    <p>你合成了 <span id="watermelon-count">0</span> 不可名状之物!</p>
+                </div>
+                <button id="play-again-btn" class="btn btn-play-again">
+                    <i class="fas fa-play"></i> 再玩一次
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 音效 -->
+    <audio id="merge-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="drop-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-3002.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="game-over-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" type="audio/mpeg">
+    </audio>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
