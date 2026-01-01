@@ -1,5 +1,7 @@
 // 游戏主逻辑
 document.addEventListener('DOMContentLoaded', () => {
+    // 初始化动态背景
+    initDynamicBackground();
     // Matter.js 模块
     const {
         Engine,
@@ -648,3 +650,313 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化游戏
     initGame();
 });
+
+// 动态背景类
+class DynamicBackground {
+    constructor() {
+        this.canvas = document.getElementById('dynamic-background');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // 线条配置
+        this.config = {
+            lineCount: 5,           // 线条数量（3-7之间）
+            lineWidth: 4,           // 线条内部宽度
+            outlineWidth: 2,        // 边缘勾线宽度
+            lineColor: '#ffffff',   // 线条颜色
+            outlineColor: '#4c51bf', // 边缘颜色
+            maxDistance: 300,       // 线条最大长度
+            segmentCount: 20,       // 每条线的分段数
+            mouseInfluence: 0.3,    // 鼠标影响系数（0-1）
+            waveAmplitude: 30,      // 波浪振幅
+            waveFrequency: 0.02,    // 波浪频率
+            movementSpeed: 0.005,   // 运动速度
+            centerX: 0,             // 中心点X（会在resize中设置）
+            centerY: 0,             // 中心点Y（会在resize中设置）
+            lines: []               // 线条数据
+        };
+        
+        // 鼠标位置
+        this.mouse = {
+            x: 0,
+            y: 0,
+            prevX: 0,
+            prevY: 0,
+            velocity: { x: 0, y: 0 }
+        };
+        
+        // 动画相关
+        this.time = 0;
+        this.animationId = null;
+        
+        // 初始化
+        this.init();
+    }
+    
+    init() {
+        // 设置画布大小
+        this.resize();
+        
+        // 创建线条数据
+        this.createLines();
+        
+        // 绑定事件
+        this.bindEvents();
+        
+        // 开始动画
+        this.animate();
+    }
+    
+    resize() {
+        // 更新画布尺寸
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        
+        // 设置中心点为页面中心
+        this.config.centerX = this.canvas.width / 2;
+        this.config.centerY = this.canvas.height / 2;
+        
+        // 重新创建线条
+        this.createLines();
+    }
+    
+    createLines() {
+        this.config.lines = [];
+        const angleStep = (Math.PI * 2) / this.config.lineCount;
+        
+        for (let i = 0; i < this.config.lineCount; i++) {
+            // 计算线条方向
+            const angle = angleStep * i;
+            
+            // 创建线条分段点
+            const segments = [];
+            for (let j = 0; j <= this.config.segmentCount; j++) {
+                const progress = j / this.config.segmentCount;
+                const distance = this.config.maxDistance * progress;
+                
+                // 基础位置
+                let x = this.config.centerX + Math.cos(angle) * distance;
+                let y = this.config.centerY + Math.sin(angle) * distance;
+                
+                // 添加初始波浪
+                const waveOffset = Math.sin(progress * Math.PI * 3) * this.config.waveAmplitude * progress;
+                const perpendicularAngle = angle + Math.PI / 2;
+                x += Math.cos(perpendicularAngle) * waveOffset;
+                y += Math.sin(perpendicularAngle) * waveOffset;
+                
+                segments.push({
+                    x, y,
+                    baseX: x,
+                    baseY: y,
+                    progress
+                });
+            }
+            
+            this.config.lines.push({
+                angle,
+                segments,
+                hue: (i * 360) / this.config.lineCount, // 可选：不同颜色
+                length: this.config.maxDistance
+            });
+        }
+    }
+    
+    bindEvents() {
+        // 窗口大小变化
+        window.addEventListener('resize', () => this.resize());
+        
+        // 鼠标移动
+        window.addEventListener('mousemove', (e) => {
+            this.mouse.prevX = this.mouse.x;
+            this.mouse.prevY = this.mouse.y;
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
+            
+            // 计算鼠标速度
+            this.mouse.velocity.x = this.mouse.x - this.mouse.prevX;
+            this.mouse.velocity.y = this.mouse.y - this.mouse.prevY;
+        });
+        
+        // 鼠标离开窗口
+        window.addEventListener('mouseleave', () => {
+            this.mouse.x = this.config.centerX;
+            this.mouse.y = this.config.centerY;
+            this.mouse.velocity.x = 0;
+            this.mouse.velocity.y = 0;
+        });
+    }
+    
+    updateLines() {
+        this.time += this.config.movementSpeed;
+        
+        this.config.lines.forEach((line, lineIndex) => {
+            line.segments.forEach((segment, segmentIndex) => {
+                // 重置到基础位置
+                segment.x = segment.baseX;
+                segment.y = segment.baseY;
+                
+                // 添加波浪效果
+                const waveValue = Math.sin(
+                    this.time * 2 + 
+                    lineIndex * 0.5 + 
+                    segment.progress * Math.PI * 8
+                ) * this.config.waveAmplitude * segment.progress;
+                
+                const perpendicularAngle = line.angle + Math.PI / 2;
+                segment.x += Math.cos(perpendicularAngle) * waveValue;
+                segment.y += Math.sin(perpendicularAngle) * waveValue;
+                
+                // 鼠标影响
+                const dx = segment.x - this.mouse.x;
+                const dy = segment.y - this.mouse.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const maxMouseDistance = 200;
+                
+                if (distance < maxMouseDistance) {
+                    const influence = (1 - distance / maxMouseDistance) * this.config.mouseInfluence;
+                    
+                    // 鼠标位置影响
+                    const pushForce = 1 - distance / maxMouseDistance;
+                    segment.x += (this.mouse.x - segment.x) * pushForce * 0.1;
+                    segment.y += (this.mouse.y - segment.y) * pushForce * 0.1;
+                    
+                    // 鼠标速度影响
+                    segment.x += this.mouse.velocity.x * influence * 0.5;
+                    segment.y += this.mouse.velocity.y * influence * 0.5;
+                }
+                
+                // 边界约束（可选）
+                segment.x = Math.max(0, Math.min(this.canvas.width, segment.x));
+                segment.y = Math.max(0, Math.min(this.canvas.height, segment.y));
+            });
+        });
+    }
+    
+    drawLines() {
+        // 清空画布
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.config.lines.forEach((line) => {
+            // 绘制线条主体（内部填充）
+            this.ctx.beginPath();
+            this.ctx.moveTo(line.segments[0].x, line.segments[0].y);
+            
+            // 创建平滑曲线
+            for (let i = 1; i < line.segments.length; i++) {
+                const prev = line.segments[i - 1];
+                const curr = line.segments[i];
+                const cpX = (prev.x + curr.x) / 2;
+                const cpY = (prev.y + curr.y) / 2;
+                
+                this.ctx.quadraticCurveTo(prev.x, prev.y, cpX, cpY);
+            }
+            
+            // 绘制最后一个点
+            const last = line.segments[line.segments.length - 1];
+            this.ctx.lineTo(last.x, last.y);
+            
+            // 线条样式
+            this.ctx.lineWidth = this.config.lineWidth;
+            this.ctx.strokeStyle = this.config.lineColor;
+            this.ctx.lineCap = 'round';
+            this.ctx.lineJoin = 'round';
+            this.ctx.stroke();
+            
+            // 绘制边缘勾线（外边框）
+            this.ctx.beginPath();
+            this.ctx.moveTo(line.segments[0].x, line.segments[0].y);
+            
+            for (let i = 1; i < line.segments.length; i++) {
+                const prev = line.segments[i - 1];
+                const curr = line.segments[i];
+                const cpX = (prev.x + curr.x) / 2;
+                const cpY = (prev.y + curr.y) / 2;
+                
+                this.ctx.quadraticCurveTo(prev.x, prev.y, cpX, cpY);
+            }
+            
+            this.ctx.lineTo(last.x, last.y);
+            
+            this.ctx.lineWidth = this.config.lineWidth + this.config.outlineWidth * 2;
+            this.ctx.strokeStyle = this.config.outlineColor;
+            this.ctx.globalAlpha = 0.3;
+            this.ctx.stroke();
+            this.ctx.globalAlpha = 1;
+            
+            // 绘制发光效果
+            this.ctx.beginPath();
+            this.ctx.moveTo(line.segments[0].x, line.segments[0].y);
+            
+            for (let i = 1; i < line.segments.length; i++) {
+                const prev = line.segments[i - 1];
+                const curr = line.segments[i];
+                const cpX = (prev.x + curr.x) / 2;
+                const cpY = (prev.y + curr.y) / 2;
+                
+                this.ctx.quadraticCurveTo(prev.x, prev.y, cpX, cpY);
+            }
+            
+            this.ctx.lineTo(last.x, last.y);
+            
+            // 添加发光效果
+            this.ctx.lineWidth = this.config.lineWidth;
+            this.ctx.strokeStyle = this.config.lineColor;
+            this.ctx.shadowColor = this.config.lineColor;
+            this.ctx.shadowBlur = 15;
+            this.ctx.stroke();
+            this.ctx.shadowBlur = 0;
+        });
+        
+        // 可选：绘制中心点
+        this.drawCenterPoint();
+    }
+    
+    drawCenterPoint() {
+        // 绘制中心点（可选）
+        this.ctx.beginPath();
+        this.ctx.arc(this.config.centerX, this.config.centerY, 8, 0, Math.PI * 2);
+        
+        // 渐变填充
+        const gradient = this.ctx.createRadialGradient(
+            this.config.centerX, this.config.centerY, 0,
+            this.config.centerX, this.config.centerY, 8
+        );
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(1, '#4c51bf');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+        
+        // 外发光
+        this.ctx.beginPath();
+        this.ctx.arc(this.config.centerX, this.config.centerY, 10, 0, Math.PI * 2);
+        this.ctx.strokeStyle = '#4c51bf';
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+        
+        // 添加脉冲动画
+        const pulseSize = 5 + Math.sin(this.time * 5) * 3;
+        this.ctx.beginPath();
+        this.ctx.arc(this.config.centerX, this.config.centerY, pulseSize, 0, Math.PI * 2);
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        this.ctx.lineWidth = 1;
+        this.ctx.stroke();
+    }
+    
+    animate() {
+        this.updateLines();
+        this.drawLines();
+        this.animationId = requestAnimationFrame(() => this.animate());
+    }
+    
+    // 销毁方法（如果需要）
+    destroy() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+    }
+}
+
+// 初始化动态背景
+function initDynamicBackground() {
+    window.dynamicBackground = new DynamicBackground();
+}
