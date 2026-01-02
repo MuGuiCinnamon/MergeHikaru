@@ -502,8 +502,8 @@ body {
     }
     
     #game-canvas {
-        width: 100%;
-        height: 500px;
+
+        height: 700px;
     }
 }
 
@@ -522,6 +522,7 @@ body {
     
     .game-info {
         flex-direction: column;
+        height: 300px;
         gap: 15px;
     }
     
