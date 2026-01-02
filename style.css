@@ -424,41 +424,69 @@ body {
     margin-top: 30px;
 }
 
-/* 水果图片类 - 对应10种水果 */
-.fruit-type-0 { background-image: url('../assets/image/01.png'); }
-.fruit-type-1 { background-image: url('../assets/image/02.png'); }
-.fruit-type-2 { background-image: url('../assets/image/03.png'); }
-.fruit-type-3 { background-image: url('../assets/image/04.png'); }
-.fruit-type-4 { background-image: url('../assets/image/05.png'); }
-.fruit-type-5 { background-image: url('../assets/image/06.png'); }
-.fruit-type-6 { background-image: url('../assets/image/07.png'); }
-.fruit-type-7 { background-image: url('../assets/image/08.png'); }
-.fruit-type-8 { background-image: url('../assets/image/09.png'); }
-.fruit-type-9 { background-image: url('../assets/image/10.png'); }
+/* 定义所有水果图片的 CSS 变量 */
+:root {
+  --fruit-01: url('../assets/image/01.png');
+  --fruit-02: url('../assets/image/02.png');
+  --fruit-03: url('../assets/image/03.png');
+  --fruit-04: url('../assets/image/04.png');
+  --fruit-05: url('../assets/image/05.png');
+  --fruit-06: url('../assets/image/06.png');
+  --fruit-07: url('../assets/image/07.png');
+  --fruit-08: url('../assets/image/08.png');
+  --fruit-09: url('../assets/image/09.png');
+  --fruit-10: url('../assets/image/10.png');
+}
 
-/* 下一个水果预览的图片样式 */
-.next-fruit[data-type="0"] { background-image: url('../assets/image/01.png'); }
-.next-fruit[data-type="1"] { background-image: url('../assets/image/02.png'); }
-.next-fruit[data-type="2"] { background-image: url('../assets/image/03.png'); }
-.next-fruit[data-type="3"] { background-image: url('../assets/image/04.png'); }
-.next-fruit[data-type="4"] { background-image: url('../assets/image/05.png'); }
-.next-fruit[data-type="5"] { background-image: url('../assets/image/06.png'); }
-.next-fruit[data-type="6"] { background-image: url('../assets/image/07.png'); }
-.next-fruit[data-type="7"] { background-image: url('../assets/image/08.png'); }
-.next-fruit[data-type="8"] { background-image: url('../assets/image/09.png'); }
-.next-fruit[data-type="9"] { background-image: url('../assets/image/10.png'); }
+/* 通用水果图片样式 */
+.fruit,
+.next-fruit,
+.fruit-ref-icon {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
 
-/* 水果参考表的图片样式 */
-.fruit-ref-icon[data-type="0"] { background-image: url('../assets/image/01.png'); }
-.fruit-ref-icon[data-type="1"] { background-image: url('../assets/image/02.png'); }
-.fruit-ref-icon[data-type="2"] { background-image: url('../assets/image/03.png'); }
-.fruit-ref-icon[data-type="3"] { background-image: url('../assets/image/04.png'); }
-.fruit-ref-icon[data-type="4"] { background-image: url('../assets/image/05.png'); }
-.fruit-ref-icon[data-type="5"] { background-image: url('../assets/image/06.png'); }
-.fruit-ref-icon[data-type="6"] { background-image: url('../assets/image/07.png'); }
-.fruit-ref-icon[data-type="7"] { background-image: url('../assets/image/08.png'); }
-.fruit-ref-icon[data-type="8"] { background-image: url('../assets/image/09.png'); }
-.fruit-ref-icon[data-type="9"] { background-image: url('../assets/image/10.png'); }
+/* 水果元素根据类型设置图片 */
+.fruit[class*="fruit-type-"],
+.next-fruit[data-type],
+.fruit-ref-icon[data-type] {
+  /* 默认背景（可选） */
+  background-color: transparent;
+}
+
+/* 使用属性选择器统一设置所有图片 */
+.fruit-type-0,
+.next-fruit[data-type="0"],
+.fruit-ref-icon[data-type="0"] { background-image: var(--fruit-01); }
+.fruit-type-1,
+.next-fruit[data-type="1"],
+.fruit-ref-icon[data-type="1"] { background-image: var(--fruit-02); }
+.fruit-type-2,
+.next-fruit[data-type="2"],
+.fruit-ref-icon[data-type="2"] { background-image: var(--fruit-03); }
+.fruit-type-3,
+.next-fruit[data-type="3"],
+.fruit-ref-icon[data-type="3"] { background-image: var(--fruit-04); }
+.fruit-type-4,
+.next-fruit[data-type="4"],
+.fruit-ref-icon[data-type="4"] { background-image: var(--fruit-05); }
+.fruit-type-5,
+.next-fruit[data-type="5"],
+.fruit-ref-icon[data-type="5"] { background-image: var(--fruit-06); }
+.fruit-type-6,
+.next-fruit[data-type="6"],
+.fruit-ref-icon[data-type="6"] { background-image: var(--fruit-07); }
+.fruit-type-7,
+.next-fruit[data-type="7"],
+.fruit-ref-icon[data-type="7"] { background-image: var(--fruit-08); }
+.fruit-type-8,
+.next-fruit[data-type="8"],
+.fruit-ref-icon[data-type="8"] { background-image: var(--fruit-09); }
+.fruit-type-9,
+.next-fruit[data-type="9"],
+.fruit-ref-icon[data-type="9"] { background-image: var(--fruit-10); }
 
 /* 水果样式 */
 .fruit {
