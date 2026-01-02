@@ -248,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
         
         // 添加背景图片样式
+        fruitEl.style.backgroundImage = `url('assets/image/${String(type + 1).padStart(2, '0')}.png')`;
         fruitEl.style.backgroundSize = 'cover';
         fruitEl.style.backgroundPosition = 'center';
         fruitEl.style.backgroundRepeat = 'no-repeat';
