@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 游戏配置
     const CONFIG = {
-        canvasWidth: 500,
-        canvasHeight: 700,
+        canvasWidth: 400,
+        canvasHeight: 600,
         fruitTypes: [
             { name: '剑突', radius: 20, color: '#e53e3e', score: 1 },
             { name: '左手', radius: 30, color: '#dd6b20', score: 2 },
