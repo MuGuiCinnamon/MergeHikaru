@@ -48,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameSpeed: 1,
         isGameFocused: false,
         isAboutToEnd:false,
-        dangerCounter:0
+        dangerCounter:0,
+        isMusicOn: true,
+        backgroundMusicVolume: 0.5 
 
     };
 
@@ -71,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mergeSound = document.getElementById('merge-sound');
     const dropSound = document.getElementById('drop-sound');
     const gameOverSound = document.getElementById('game-over-sound');
+    const backgroundMusic = document.getElementById('background-music');
 
     // ========== Matter.js 初始化 ==========
     const engine = Engine.create();
@@ -125,8 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
             isSoundOn: true,
             watermelonCount: 0,
             gameSpeed: 1,
-            isGameFocused: false
+            isGameFocused: false,
+            backgroundMusicVolume: 0.5
         };
+        
 
         // 清除所有物理实体
         World.clear(world, false);
@@ -140,6 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateNextFruit();
         updateHighestScore();
         gameOverModal.style.display = 'none';
+
+        // 设置背景音乐
+        backgroundMusic.volume = gameState.backgroundMusicVolume;
+        backgroundMusic.loop = true;
+        if (gameState.isMusicOn) {
+            // 延迟播放，避免自动播放被浏览器阻止
+            setTimeout(() => {
+                backgroundMusic.play().catch(e => console.log('背景音乐自动播放被阻止:', e));
+            }, 1000);
+        }
+        
 
         // 生成水果参考表
         generateFruitReference();
@@ -625,6 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 按钮事件
     restartBtn.addEventListener('click', initGame);
     
+    // 修改 pauseBtn 的点击事件（第471行左右）：
     pauseBtn.addEventListener('click', () => {
         gameState.isPaused = !gameState.isPaused;
         pauseBtn.innerHTML = gameState.isPaused ? 
@@ -633,16 +650,37 @@ document.addEventListener('DOMContentLoaded', () => {
             
         if (gameState.isPaused) {
             Runner.stop(runner);
+            // 暂停背景音乐
+            if (gameState.isMusicOn) {
+                backgroundMusic.pause();
+            }
         } else {
             Runner.run(runner, engine);
+            // 继续播放背景音乐
+            if (gameState.isMusicOn) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
+            }
         }
     });
     
+    // 修改 soundBtn 的点击事件（第477行左右）：
     soundBtn.addEventListener('click', () => {
         gameState.isSoundOn = !gameState.isSoundOn;
+        gameState.isMusicOn = gameState.isSoundOn; // 背景音乐与音效同步
+        
         soundBtn.innerHTML = gameState.isSoundOn ? 
-            '<i class="fas fa-volume-up"></i> 音效' : 
-            '<i class="fas fa-volume-mute"></i> 音效';
+            '<i class="fas fa-volume-up"></i> 音乐' : 
+            '<i class="fas fa-volume-mute"></i> 音乐';
+        
+        // 控制背景音乐
+        if (gameState.isMusicOn) {
+            backgroundMusic.volume = gameState.backgroundMusicVolume;
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
+            }
+        } else {
+            backgroundMusic.pause();
+        }
     });
     
     playAgainBtn.addEventListener('click', initGame);

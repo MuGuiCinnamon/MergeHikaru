@@ -23,7 +23,7 @@
                         <i class="fas fa-pause"></i> 暂停
                     </button>
                     <button id="sound-btn" class="btn btn-sound">
-                        <i class="fas fa-volume-up"></i> 音效
+                        <i class="fas fa-volume-up"></i> 音乐
                     </button>
                 </div>
             </div>
@@ -85,13 +85,16 @@
 
     <!-- 音效 -->
     <audio id="merge-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" type="audio/mpeg">
+    <source src="assets/audio/merge.mp3" type="audio/mpeg">
     </audio>
     <audio id="drop-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-3002.mp3" type="audio/mpeg">
+        <source src="assets/audio/drop.mp3" type="audio/mpeg">
     </audio>
     <audio id="game-over-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" type="audio/mpeg">
+        <source src="assets/audio/game_over.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="background-music" preload="auto" loop>
+        <source src="assets/audio/background_music.mp3" type="audio/mpeg">
     </audio>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <script src="main.js"></script>
