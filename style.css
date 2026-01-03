@@ -20,15 +20,13 @@
     background-size: contain;
 }
 
-/* 移除原来的 body 背景渐变 */
 body {
-    background: transparent !important; /* 移除原来的渐变背景 */
-    color: #f7fafc;
+    background: transparent !important; 
     min-height: 100vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    position: relative; /* 确保内容在画布上方 */
+    position: relative; 
 }
 
 
@@ -80,8 +78,8 @@ body {
     .next-fruit-container,
     .score-container,
     .level-container {
-        flex: 1; /* 均分剩余空间 */
-        min-width: 0; /* 允许缩小到0 */
+        flex: 1; 
+        min-width: 0; 
         display: flex;
         align-items: center;
         justify-content: center;
@@ -161,9 +159,9 @@ body {
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, transparent, #f56565, transparent);
+    background: linear-gradient(90deg, transparent, #000000, transparent);
     z-index: 10;
-    box-shadow: 0 0 10px #f56565;
+    box-shadow: 0 0 10px #ffffff;
 }
 
 .next-fruit-container {
