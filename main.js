@@ -238,14 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
         fruitEl.style.width = `${fruitType.radius * 2}px`;
         fruitEl.style.height = `${fruitType.radius * 2}px`;
         fruitEl.style.position = 'absolute';
-        fruitEl.style.borderRadius = '50%';
+        fruitEl.style.borderRadius = '100%';
         fruitEl.style.display = 'flex';
         fruitEl.style.alignItems = 'center';
         fruitEl.style.justifyContent = 'center';
         fruitEl.style.userSelect = 'none';
-        fruitEl.style.border = '3px solid rgba(255, 255, 255, 0.3)';
-        fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
+        fruitEl.style.border = '3px solid rgba(0, 0, 0, 0)';
+        //fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
+        //const imgNumber = String(type + 1).padStart(2, '0');
+        //fruitEl.style.backgroundImage = `url('/MergeHikaru/assets/image/${imgNumber}.png')`;
         
         // 添加背景图片样式
         fruitEl.style.backgroundSize = 'cover';
@@ -279,8 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dropSound.play();
         }
         
-        // 创建新的预览水果
-        // 延迟1秒后创建新的预览水果
         setTimeout(() => {
             if (!gameState.isGameOver && !gameState.isPaused) {
                 createNewFruit();
@@ -330,7 +330,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 生成水果参考表
-    // 生成水果参考表 - 修改后版本
     function generateFruitReference() {
         fruitReferenceList.innerHTML = '';
         
