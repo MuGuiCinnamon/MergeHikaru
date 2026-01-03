@@ -1,3 +1,3 @@
-# SynthesizeHikaru
-https://muguicinnamon.github.io/SynthesizeHikaru/
+# MergeHikaru
+https://muguicinnamon.github.io/MergeHikaru/
 
