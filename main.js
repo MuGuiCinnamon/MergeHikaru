@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 当鼠标进入游戏区域时，游戏获得焦点
     canvasEl.addEventListener('mouseenter', () => {
         gameState.isGameFocused = true;
-        canvasEl.style.outline = '3px solid #4c51bf';
+        canvasEl.style.outline = '3px solid #ffffffff';
     });
 
     // 当鼠标离开游戏区域时，游戏失去焦点
@@ -639,7 +639,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 按钮事件
-    restartBtn.addEventListener('click', initGame);
+    restartBtn.addEventListener('click', () => {
+        // 先完全停止当前游戏
+        if (!gameState.isGameOver) {
+            Runner.stop(runner);// 结束当前游戏
+        }
+        
+        // 延迟一小段时间再重新开始，确保完全清理
+        setTimeout(() => {
+            initGame();
+        }, 100);
+    });
     
     // 修改 pauseBtn 的点击事件（第471行左右）：
     pauseBtn.addEventListener('click', () => {
@@ -944,41 +954,10 @@ class DynamicBackground {
             this.ctx.shadowBlur = 0;
         });
         
-        // 可选：绘制中心点
-        this.drawCenterPoint();
+
     }
     
-    drawCenterPoint() {
-        // 绘制中心点（可选）
-        this.ctx.beginPath();
-        this.ctx.arc(this.config.centerX, this.config.centerY, 8, 0, Math.PI * 2);
-        
-        // 渐变填充
-        const gradient = this.ctx.createRadialGradient(
-            this.config.centerX, this.config.centerY, 0,
-            this.config.centerX, this.config.centerY, 8
-        );
-        gradient.addColorStop(0, '#ffffff');
-        gradient.addColorStop(1, '#4c51bf');
-        
-        this.ctx.fillStyle = gradient;
-        this.ctx.fill();
-        
-        // 外发光
-        this.ctx.beginPath();
-        this.ctx.arc(this.config.centerX, this.config.centerY, 10, 0, Math.PI * 2);
-        this.ctx.strokeStyle = '#4c51bf';
-        this.ctx.lineWidth = 2;
-        this.ctx.stroke();
-        
-        // 添加脉冲动画
-        const pulseSize = 5 + Math.sin(this.time * 5) * 3;
-        this.ctx.beginPath();
-        this.ctx.arc(this.config.centerX, this.config.centerY, pulseSize, 0, Math.PI * 2);
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        this.ctx.lineWidth = 1;
-        this.ctx.stroke();
-    }
+    
     
     animate() {
         this.updateLines();

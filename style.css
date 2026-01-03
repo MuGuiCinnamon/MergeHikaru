@@ -12,8 +12,12 @@
     width: 100%;
     height: 100%;
     z-index: -1; /* 放在所有内容下面 */
-    background-color: #000000; /* 纯黑色背景 */
+    background-color: #4EACE6; /* 纯黑色背景 */
     pointer-events: none; /* 允许鼠标事件穿透 */
+    background-image: url('assets/image/website/mv_title@2x.png'); /* 替换为你的图片路径 */
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
 }
 
 /* 移除原来的 body 背景渐变 */
@@ -65,6 +69,12 @@ body {
     margin-top: 15px;
     margin-bottom: 15px;
     height: 100px;
+    background: #4EACE6;
+    background: linear-gradient(75deg, #4EACE6, #000000);
+    /*background: linear-gradient(0deg, #248bdb, #4EACE6);*/
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /*border: 1px solid rgba(255, 255, 255, 0.1);*/
+    border-radius: 12px;
 
     /* 关键：子元素均分宽度 */
     .next-fruit-container,
@@ -83,27 +93,28 @@ body {
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
-    background: rgba(15, 23, 42, 0.9);
+    /*background: rgba(15, 23, 42, 0.9);
     border-radius: 12px;
-    border: 2px solid #4c51bf;
+    border: 2px solid #004c83;*/
 }
 
 .score-label, .level-label {
     font-size: 1.2rem;
-    color: #cbd5e0;
+    color: #ffffff;
 }
 
 .score-value {
     font-size: 2rem;
     font-weight: bold;
-    color: #68d391;
-    text-shadow: 0 0 8px rgba(104, 211, 145, 0.5);
+    color: #50ff93;
+    text-shadow: 0 0 8px rgba(171, 243, 199, 0.5);
 }
 
 .target-fruit {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
-    color: #f56565;
+    color: #2b5bf9;
+    text-shadow: 0 0 8px rgba(0, 102, 255, 0.5);
 }
 
 /* 游戏区域 */
@@ -115,11 +126,15 @@ body {
 
 .game-board {
     flex: 3;
-    background: rgba(30, 41, 59, 0.8);
+    /*background: rgba(30, 41, 59, 0.8);*/
+    background-image: url('assets/image/website/eye.png'); 
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: contain;
     border-radius: 16px;
     padding: 25px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /*box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -128,13 +143,14 @@ body {
 #game-canvas {
     width: 400px;
     height: 600px;
-    background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+    /*background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);*/
+    background: rgba(15, 57, 96, 0.3);
     border-radius: 12px;
     position: relative;
     overflow: hidden;
     margin-bottom: 25px;
-    border: 3px solid #4a5568;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    border: 3px solid #4EACE6;
+    box-shadow: inset 0 0 20px rgba(3, 38, 74, 0.5);
 }
 
 /* 警戒线 */
@@ -156,14 +172,14 @@ body {
     gap: 15px;
     margin-bottom: px;
     padding: 15px 25px;
-    background: rgba(15, 23, 42, 0.9);
+    /*background: rgba(15, 23, 42, 0.9);
     border-radius: 12px;
-    border: 2px solid #4c51bf;
+    border: 2px solid #4c51bf;*/
 }
 
 .next-label {
     font-size: 1.3rem;
-    color: #cbd5e0;
+    color: #ffffff;
 }
 
 .next-fruit {
@@ -207,33 +223,40 @@ body {
 }
 
 .btn-restart {
-    background: linear-gradient(135deg, #f56565, #ed8936);
+    background: linear-gradient(135deg, #f8baba, #4d9fdf);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     color: white;
 }
 
 .btn-pause {
-    background: linear-gradient(135deg, #4299e1, #667eea);
+    background: linear-gradient(135deg, #93dccb, #4d9fdf);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     color: white;
 }
 
 .btn-sound {
-    background: linear-gradient(135deg, #48bb78, #38b2ac);
+    background: linear-gradient(135deg, #ffff8d, #4d9fdf);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     color: white;
 }
 
 /* 游戏说明区域 */
 .instructions {
     flex: 2;
-    background: rgba(30, 41, 59, 0.8);
-    border-radius: 16px;
+    /*background: rgba(0, 24, 63, 0.8);*/
+    border-radius: 0px;
     padding: 25px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /*box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);*/
+    background-image: url('assets/image/website/background.png'); 
+    background-repeat: repeat;
+    background-position: left top;
+    background-size: contain;
 }
 
 .instructions h2, .instructions h3 {
     margin-bottom: 15px;
-    color: #63b3ed;
+    color: #1e74b1;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -241,7 +264,7 @@ body {
 
 .instructions h2 {
     font-size: 1.8rem;
-    border-bottom: 2px solid #4c51bf;
+    border-bottom: 2px solid #63b3ed;
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -254,12 +277,15 @@ body {
 .instructions ul {
     padding-left: 25px;
     margin-bottom: 25px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255,0.7);
+
 }
 
 .instructions li {
     margin-bottom: 10px;
     line-height: 1.5;
-    color: #cbd5e0;
+    color: #54a3dc;
 }
 
 .instructions strong {
@@ -304,6 +330,7 @@ body {
 /* 水果参考表 */
 .fruit-reference {
     margin-top: 20px;
+    
 }
 
 #fruit-reference-list {
@@ -319,9 +346,10 @@ body {
     align-items: center;
     gap: 8px;
     padding: 15px 10px;
-    background: rgba(15, 23, 42, 0.9);
+    /*background: rgba(0, 0, 0, 0.9);*/
+    background: linear-gradient(250deg, #1475bf, #4EACE6);
     border-radius: 10px;
-    border: 1px solid #4c51bf;
+    border: 1px solid #4EACE6;
 }
 
 .fruit-ref-icon {
@@ -341,7 +369,7 @@ body {
 
 .fruit-ref-score {
     font-size: 0.8rem;
-    color: #68d391;
+    color: #c5ffdb;
     font-weight: bold;
 }
 
@@ -354,20 +382,24 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.85);
+    background-image: url('assets/image/website/Yizi.png'); 
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
     z-index: 100;
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #1a202c, #2d3748);
+    /*background: linear-gradient(135deg, #1a202c, #2d3748);*/
     padding: 40px;
     border-radius: 20px;
     text-align: center;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 2px solid #4c51bf;
+    /*box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 2px solid #4c51bf;*/
     animation: modalAppear 0.5s ease-out;
 }
 
@@ -385,7 +417,7 @@ body {
 .modal-content h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #ecc94b;
+    color: #000000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -395,7 +427,7 @@ body {
 .final-score, .highest-score, .fruit-stats {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: #cbd5e0;
+    color: #000000;
 }
 
 .final-score span, .highest-score span, .fruit-stats span {
@@ -406,19 +438,22 @@ body {
 
 .btn-play-again {
     margin-top: 30px;
-    background: linear-gradient(135deg, #ed8936, #f56565);
+    background: #000000/*linear-gradient(135deg, #ed8936, #f56565)*/;
     color: white;
     font-size: 1.3rem;
     padding: 18px 40px;
     border-radius: 15px;
-    width: 100%;
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* 页脚 */
 .footer {
     text-align: center;
     padding: 20px;
-    color: #a0aec0;
+    color: #dbe8f5;
     font-size: 0.9rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     margin-top: 30px;
@@ -531,11 +566,11 @@ body {
     
     #game-canvas {
 
-        height: 700px;
+        height: 600px;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 750px) {
     .game-header h1 {
         font-size: 2rem;
     }
@@ -550,12 +585,44 @@ body {
     
     .game-info {
         flex-direction: column;
+        background: #4eace600;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0);
         height: 300px;
         gap: 15px;
+        .next-fruit-container,
+        .score-container,
+        .level-container {
+            /*background: rgba(20, 43, 96, 0.9);*/
+            background: linear-gradient(75deg, #44a6e2, rgb(0, 0, 0));
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
     }
     
     .game-controls {
         flex-wrap: wrap;
         justify-content: center;
+    }
+    .game-board {
+        background-image: none;
+    }
+    .modal-content h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+
+    }
+    .final-score, .highest-score, .fruit-stats {
+        font-size: 1rem;
+        margin-bottom: 10px;
+
+    }
+    .final-score span, .highest-score span, .fruit-stats span {
+        font-size: 1.5rem;
+    }
+    .btn-play-again {
+        margin-top: 20px;
+
+        font-size: 1rem;
+
     }
 }
