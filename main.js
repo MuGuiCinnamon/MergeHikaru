@@ -247,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
         //const imgNumber = String(type + 1).padStart(2, '0');
+        fruitEl.style.backgroundImage = `url('assets/image/${String(type + 1).padStart(2, '0')}.png')`;
         //fruitEl.style.backgroundImage = `url('/MergeHikaru/assets/image/${imgNumber}.png')`;
         
         // 添加背景图片样式
