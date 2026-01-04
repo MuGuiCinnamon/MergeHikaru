@@ -642,6 +642,9 @@ body {
     .game-board {
         padding: 10px ;
     }
-    
+
+    #fruit-reference-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
 }
