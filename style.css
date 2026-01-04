@@ -629,3 +629,19 @@ body {
 
     }
 }
+@media (max-width: 440px) {
+    body {
+        padding: 5px ;
+    }
+    
+    .container {
+        padding: 5px ;
+        margin: 0 ;
+    }
+    
+    .game-board {
+        padding: 10px ;
+    }
+    
+
+}
