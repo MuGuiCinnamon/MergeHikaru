@@ -282,6 +282,14 @@ document.addEventListener('DOMContentLoaded', () => {
             dropSound.currentTime = 0;
             dropSound.play();
         }
+        if (gameState.isMusicOn) {
+            backgroundMusic.volume = gameState.backgroundMusicVolume;
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
+            }
+        } else {
+            backgroundMusic.pause();
+        }
         
         setTimeout(() => {
             if (!gameState.isGameOver && !gameState.isPaused) {
@@ -552,14 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.currentFruit) {
             gameState.currentFruit.x = x;
         }
-        if (gameState.isMusicOn) {
-            backgroundMusic.volume = gameState.backgroundMusicVolume;
-            if (!gameState.isPaused && !gameState.isGameOver) {
-                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
-            }
-        } else {
-            backgroundMusic.pause();
-        }
+        
     });
 
     canvasEl.addEventListener('mousemove', (e) => {
