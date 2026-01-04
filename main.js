@@ -132,14 +132,24 @@ document.addEventListener('DOMContentLoaded', () => {
             isMusicOn: true,
             backgroundMusicVolume: 0.5
         };
+
         
 
         // 清除所有物理实体
         World.clear(world, false);
         World.add(world, [ground, leftWall, rightWall]);
 
+
         // 清空画布
         canvasEl.innerHTML = '';
+
+        // 清理所有现有的特殊效果定时器
+        gameState.fruits.forEach(fruit => {
+            if (fruit.specialTimer) {
+                clearTimeout(fruit.specialTimer);
+                //console.log(`✅ 清理定时器: 水果类型=${fruit.type}, ID=${fruit.fruitId}`);
+            }
+        });
 
         // 更新UI
         updateScore();
@@ -206,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 添加自定义属性
         body.fruitType = type;
         body.isMerging = false;
+        body.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9); // 唯一ID
         
         // 添加到世界
         World.add(world, body);
@@ -218,17 +229,96 @@ document.addEventListener('DOMContentLoaded', () => {
         const fruitObj = {
             body: body,
             el: el,
-            type: type
+            type: type,
+            fruitId: body.fruitId,
+            specialTimer: null, // 特殊效果定时器
+            isSpecialState: false // 是否处于特殊状态
         };
+        // 如果是头部或遗子，启动特殊效果
+        if (type === 6 || type === 9) { // 头部
+            startHeadSpecialEffect(fruitObj);
+        } 
+        else if (type === 8) { // 遗子
+            startYiziSpecialEffect(fruitObj);
+        }
+
         
         return fruitObj;
     }
+    // 切换水果图片
+    function switchFruitImage(fruitObj, special) {
+        if (!fruitObj.el) return;
+        
+        const type = fruitObj.type;
+        let imgName;
+        
+        if (type === 6) { // 头部
+            imgName = special ? '07_1.png' : '07.png';
+        } else if (type === 8) { // 遗子
+            imgName = special ? '09_1.png' : '09.png';
+        } else if (type === 9) { // 轮子
+            imgName = special ? '10_1.png' : '10.png';
+        } else {
+            return; // 其他水果不需要切换
+        }
+        
+        // 更新图片
+        fruitObj.el.style.backgroundImage = `url('assets/image/${imgName}')`;
+        fruitObj.isSpecialState = special;
+    }
+    // 头部特殊效果
+    function startHeadSpecialEffect(fruitObj) {
+        // 随机延迟：1-10秒
+        const randomDelay = 1000 + Math.random() * 9000;
+        
+        fruitObj.specialTimer = setTimeout(() => {
+            if (!fruitObj.el || !fruitObj.el.parentNode) return;
+            
+            // 切换到特殊图片
+            switchFruitImage(fruitObj, true);
+            
+            // 5秒后恢复
+            setTimeout(() => {
+                if (!fruitObj.el || !fruitObj.el.parentNode) return;
+                
+                // 恢复普通图片
+                switchFruitImage(fruitObj, false);
+                
+                // 重新启动效果
+                startHeadSpecialEffect(fruitObj);
+            }, 5000);
+            
+        }, randomDelay);
+    }
+
+    // 遗子特殊效果
+    function startYiziSpecialEffect(fruitObj) {
+        let isSpecial = false;
+        
+        function toggleEffect() {
+            if (!fruitObj.el || !fruitObj.el.parentNode) return;
+            
+            isSpecial = !isSpecial;
+            switchFruitImage(fruitObj, isSpecial);
+            
+            // 1秒后再次切换
+            fruitObj.specialTimer = setTimeout(toggleEffect, 1000);
+        }
+        
+        // 1秒后开始
+        fruitObj.specialTimer = setTimeout(toggleEffect, 1000);
+    }
+
 
     // 绘制水果 DOM 元素 - 修改后版本
     function drawFruit(type, x, y) {
         const fruitType = CONFIG.fruitTypes[type];
         const fruitEl = document.createElement('div');
+
         fruitEl.className = `fruit fruit-type-${type}`; // 添加图片类
+        // 水果类型特定ID，用于后续查找
+        fruitEl.dataset.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        fruitEl.dataset.fruitType = type;
         fruitEl.style.width = `${fruitType.radius * 2}px`;
         fruitEl.style.height = `${fruitType.radius * 2}px`;
         fruitEl.style.position = 'absolute';
@@ -240,8 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
         fruitEl.style.border = '3px solid rgba(0, 0, 0, 0)';
         //fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
-        //const imgNumber = String(type + 1).padStart(2, '0');
-        fruitEl.style.backgroundImage = `url('assets/image/${String(type + 1).padStart(2, '0')}.png')`;
+
+        // 根据类型和状态决定图片
+        const imgNumber = String(type + 1).padStart(2, '0');
+        fruitEl.style.backgroundImage = `url('assets/image/${imgNumber}.png')`;
         //fruitEl.style.backgroundImage = `url('/MergeHikaru/assets/image/${imgNumber}.png')`;
         
         // 添加背景图片样式
@@ -489,6 +581,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 标记为正在合并
             bodyA.isMerging = bodyB.isMerging = true;
+            // 清理定时器
+            const fruitA = gameState.fruits.find(f => f.body === bodyA);
+            const fruitB = gameState.fruits.find(f => f.body === bodyB);
+            
+            if (fruitA && fruitA.specialTimer) {
+                clearTimeout(fruitA.specialTimer);
+                //console.log(`🔄 碰撞清理A: ${CONFIG.fruitTypes[fruitA.type].name}, ID=${fruitA.fruitId}`);
+            }
+            if (fruitB && fruitB.specialTimer) {
+                clearTimeout(fruitB.specialTimer);
+                //console.log(`🔄 碰撞清理B: ${CONFIG.fruitTypes[fruitB.type].name}, ID=${fruitB.fruitId}`);
+            }
             
             // 计算新水果位置
             const x = (bodyA.position.x + bodyB.position.x) / 2;
