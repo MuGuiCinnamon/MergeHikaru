@@ -27,6 +27,8 @@ body {
     display: flex;
     flex-direction: column;
     position: relative; 
+    overflow-x: hidden; /* 防止水平滚动 */
+    width: 100%; 
 }
 
 
