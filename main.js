@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             watermelonCount: 0,
             gameSpeed: 1,
             isGameFocused: false,
+            isMusicOn: true,
             backgroundMusicVolume: 0.5
         };
         
@@ -551,6 +552,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.currentFruit) {
             gameState.currentFruit.x = x;
         }
+        if (gameState.isMusicOn) {
+            backgroundMusic.volume = gameState.backgroundMusicVolume;
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
+            }
+        } else {
+            backgroundMusic.pause();
+        }
     });
 
     canvasEl.addEventListener('mousemove', (e) => {
@@ -673,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // 修改 soundBtn 的点击事件（第477行左右）：
+
     soundBtn.addEventListener('click', () => {
         gameState.isSoundOn = !gameState.isSoundOn;
         gameState.isMusicOn = gameState.isSoundOn; // 背景音乐与音效同步

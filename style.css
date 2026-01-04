@@ -458,17 +458,18 @@ body {
 }
 
 /* 定义所有水果图片的 CSS 变量 */
+
 :root {
-  --fruit-01: url('/MergeHikaru/assets/image/01.png');
-  --fruit-02: url('/MergeHikaru/assets/image/02.png');
-  --fruit-03: url('/MergeHikaru/assets/image/03.png');
-  --fruit-04: url('/MergeHikaru/assets/image/04.png');
-  --fruit-05: url('/MergeHikaru/assets/image/05.png');
-  --fruit-06: url('/MergeHikaru/assets/image/06.png');
-  --fruit-07: url('/MergeHikaru/assets/image/07.png');
-  --fruit-08: url('/MergeHikaru/assets/image/08.png');
-  --fruit-09: url('/MergeHikaru/assets/image/09.png');
-  --fruit-10: url('/MergeHikaru/assets/image/10.png');
+  --fruit-01: url('/assets/image/01.png');
+  --fruit-02: url('/assets/image/02.png');
+  --fruit-03: url('/assets/image/03.png');
+  --fruit-04: url('/assets/image/04.png');
+  --fruit-05: url('/assets/image/05.png');
+  --fruit-06: url('/assets/image/06.png');
+  --fruit-07: url('/assets/image/07.png');
+  --fruit-08: url('/assets/image/08.png');
+  --fruit-09: url('/assets/image/09.png');
+  --fruit-10: url('/assets/image/10.png');
 }
 
 /* 通用水果图片样式 */
