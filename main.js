@@ -148,20 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverModal.style.display = 'none';
 
         // 设置背景音乐
-        backgroundMusic.volume = gameState.backgroundMusicVolume;
-        backgroundMusic.loop = true;
-        if (gameState.isMusicOn) {
-            // 延迟播放，避免自动播放被浏览器阻止
-            setTimeout(() => {
-                backgroundMusic.play().catch(e => console.log('背景音乐自动播放被阻止:', e));
-            }, 1000);
-        }
+        
         
 
         // 生成水果参考表
         generateFruitReference();
 
-        // 设置目标水果
+        // 设置目标水果 
         targetFruitEl.textContent = CONFIG.fruitTypes[CONFIG.fruitTypes.length - 1].name;
 
         // 创建第一个预览水果
@@ -657,7 +650,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 延迟一小段时间再重新开始，确保完全清理
         setTimeout(() => {
+            const currentMusicState = gameState.isMusicOn;
+            const currentSoundState = gameState.isSoundOn;
             initGame();
+            gameState.isMusicOn = currentMusicState;
+            gameState.isSoundOn = currentSoundState;
         }, 100);
     });
     
