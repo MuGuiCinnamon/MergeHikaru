@@ -7,29 +7,70 @@
 .fruit-sprite {
   background-image: var(--sprite-url);
   background-repeat: no-repeat;
-  background-size: auto; 
+}
+.fruit-game {
+  background-size: auto; /* 精灵图原始宽度 */
 }
 
 /* 普通状态 */
-.fruit-type-0 { width: 60px; height: 60px; background-position: -10px 0px;background-size: 2150px auto;  }
-.fruit-type-1 { width: 90px; height: 90px; background-position: -280px -10px; }
-.fruit-type-2 { width: 120px; height: 120px; background-position: -390px -10px; }
-.fruit-type-3 { width: 150px; height: 150px; background-position: -840px -10px; }
-.fruit-type-4 { width: 180px; height: 180px; background-position: -1210px -10px; }
-.fruit-type-5 { width: 210px; height: 210px; background-position: -1640px -10px; }
-.fruit-type-6 { width: 240px; height: 240px; background-position: -2130px -10px; }
-.fruit-type-7 { width: 270px; height: 270px; background-position: -2680px -10px; }
-.fruit-type-8 { width: 300px; height: 300px; background-position: -2970px -10px; }
-.fruit-type-9 { width: 330px; height: 330px; background-position: -3610px -10px; }
+.fruit-game.fruit-type-0 { width: 60px; height: 60px; background-position: -43px -5px; background-size: 2150px auto;  }
+.fruit-game.fruit-type-1 { width: 90px; height: 90px; background-position: -151px -5px; background-size: 2350px auto;  }
+.fruit-game.fruit-type-2 { width: 120px; height: 120px; background-position: -300px -5px; background-size: 2450px auto;  }
+.fruit-game.fruit-type-3 { width: 150px; height: 150px; background-position: -509px -4px; background-size: 2600px auto;  }
+.fruit-game.fruit-type-4 { width: 180px; height: 180px; background-position: -760px -7px; background-size: 2700px auto;  }
+.fruit-game.fruit-type-5 { width: 210px; height: 210px; background-position: -1030px -5px; background-size: 2700px auto;  }
+.fruit-game.fruit-type-6 { width: 240px; height: 240px; background-position: -1335px -2px; background-size: 2700px auto;  }
+.fruit-game.fruit-type-7 { width: 270px; height: 270px; background-position: -1747px -6px; background-size: 2800px auto;  }
+.fruit-game.fruit-type-8 { width: 300px; height: 300px; background-position: -2143px -5px; background-size: 2800px auto;  }
+.fruit-game.fruit-type-9 { width: 330px; height: 330px; background-position: -2352px -10px;background-size: 2800px auto;  }
 
 /* 特殊状态（备用图片） */
-.fruit-type-0-special { width: 60px; height: 60px; background-position: -10px -10px; }
-.fruit-type-1-special { width: 90px; height: 90px; background-position: -170px -10px; }
-.fruit-type-2-special { width: 120px; height: 120px; background-position: -530px -10px; }
-.fruit-type-3-special { width: 150px; height: 150px; background-position: -670px -10px; }
-.fruit-type-4-special { width: 180px; height: 180px; background-position: -1010px -10px; }
-.fruit-type-5-special { width: 210px; height: 210px; background-position: -1410px -10px; }
-.fruit-type-6-special { width: 240px; height: 240px; background-position: -1870px -10px; }
-.fruit-type-7-special { width: 270px; height: 270px; background-position: -2390px -10px; }
-.fruit-type-8-special { width: 300px; height: 300px; background-position: -3290px -10px; }
-.fruit-type-9-special { width: 330px; height: 330px; background-position: -3960px -10px; }
+.fruit-game.fruit-type-0-special { width: 60px; height: 60px; background-position: -10px -10px; background-size: 2150px auto; }
+.fruit-game.fruit-type-1-special { width: 90px; height: 90px; background-position: -170px -10px; background-size: 2350px auto; }
+.fruit-game.fruit-type-2-special { width: 120px; height: 120px; background-position: -530px -10px; background-size: 2450px auto;}
+.fruit-game.fruit-type-3-special { width: 150px; height: 150px; background-position: -670px -10px; background-size: 2600px auto;}
+.fruit-game.fruit-type-4-special { width: 180px; height: 180px; background-position: -1010px -10px; background-size: 2700px auto;}
+.fruit-game.fruit-type-5-special { width: 210px; height: 210px; background-position: -1410px -10px; background-size: 2700px auto;}
+.fruit-game.fruit-type-6-special { width: 240px; height: 240px; background-position: -1172px -2px; background-size: 2700px auto;}
+.fruit-game.fruit-type-7-special { width: 270px; height: 270px; background-position: -2390px -10px; background-size: 2800px auto;}
+.fruit-game.fruit-type-8-special { width: 300px; height: 300px; background-position: -1934px -5px; background-size: 2800px auto;}
+.fruit-game.fruit-type-9-special { width: 330px; height: 330px; background-position: -2580px -10px; background-size: 2800px auto;}
+
+/* ========== 下一个水果（缩小一半） ========== */
+.fruit-next {
+  background-size: auto; /* 4310 ÷ 2 */
+}
+
+.fruit-next.fruit-type-0 { width: 20px; height: 20px; background-position: -22px -3px; background-size: 1075px auto;}
+.fruit-next.fruit-type-1 { width: 30px; height: 30px; background-position: -78px -3px; background-size: 1200px auto;}
+.fruit-next.fruit-type-2 { width: 40px; height: 40px; background-position: -159px -4px; background-size: 1300px auto;}
+.fruit-next.fruit-type-3 { width: 50px; height: 50px; background-position: -275px -7px; background-size: 1400px auto;}
+.fruit-next.fruit-type-4 { width: 60px; height: 60px; background-position: -408px -5px; background-size: 1450px auto;}
+.fruit-next.fruit-type-5 { width: 70px; height: 70px; background-position: -575px -5px; background-size: 1500px auto;}
+.fruit-next.fruit-type-6 { width: 80px; height: 80px; background-position: -745px -8px; background-size: 1500px auto;}
+.fruit-next.fruit-type-7 { width: 90px; height: 90px; background-position: -937px -3px; background-size: 1500px auto;}
+.fruit-next.fruit-type-8 { width: 100px; height: 100px; background-position: -1148px -5px; background-size: 1500px auto;}
+.fruit-next.fruit-type-9 { width: 110px; height: 110px; background-position: -1430px -7px; background-size: 1550px auto;}
+
+
+/* ========== 合成表水果（缩小一半） ========== */
+.fruit-ref {
+ /* 与下一个水果相同 */
+  /* 可以添加其他合成表特有样式 */
+  background-size: auto;
+  
+}
+
+/* 使用与 .fruit-next 相同的尺寸和位置 */
+.fruit-ref.fruit-type-0 { width: 20px; height: 20px; background-position: -20px 0px; background-size: 1075px auto;}
+.fruit-ref.fruit-type-1 { width: 30px; height: 30px; background-position: -76px 0px; background-size: 1200px auto;}
+.fruit-ref.fruit-type-2 { width: 40px; height: 40px; background-position: -159px 0px; background-size: 1300px auto;}
+.fruit-ref.fruit-type-3 { width: 50px; height: 50px; background-position: -273px -3px; background-size: 1400px auto;}
+.fruit-ref.fruit-type-4 { width: 60px; height: 60px; background-position: -408px -5px; background-size: 1450px auto;}
+.fruit-ref.fruit-type-5 { width: 70px; height: 70px; background-position: -575px -5px; background-size: 1500px auto;}
+.fruit-ref.fruit-type-6 { width: 80px; height: 80px; background-position: -745px -8px; background-size: 1500px auto;}
+.fruit-ref.fruit-type-7 { width: 90px; height: 90px; background-position: -937px -3px; background-size: 1500px auto;}
+.fruit-ref.fruit-type-8 { width: 100px; height: 100px; background-position: -1148px -5px; background-size: 1500px auto;}
+.fruit-ref.fruit-type-9 { width: 110px; height: 110px; background-position: -1430px -7px; background-size: 1550px auto;}
+
+

@@ -356,7 +356,7 @@ body {
     border-radius: 50%;
     background-size: 1000% 100%;
     background-position: 0 0;
-    border: 2px solid #fff;
+    /*border: 2px solid #fff;*/
 }
 
 .fruit-ref-name {
