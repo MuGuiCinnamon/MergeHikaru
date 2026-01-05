@@ -491,56 +491,133 @@ body {
 }
 
 /* 使用属性选择器统一设置所有图片 */
+/* ========== 精灵图样式 ========== */
+
+/* 所有使用精灵图的元素 */
+.fruit,
+.next-fruit,
+.fruit-ref-icon {
+    background-image: url('assets/image/css_sprites.png');
+    background-repeat: no-repeat;
+}
+
+/* 0-剑突 (60px) */
 .fruit-type-0,
 .next-fruit[data-type="0"],
-.fruit-ref-icon[data-type="0"] { background-image: var(--fruit-01); }
+.fruit-ref-icon[data-type="0"] {
+    width: 60px;
+    height: 60px;
+    background-position: -1000px -260px;
+}
+
+/* 1-左手 (90px) */
 .fruit-type-1,
 .next-fruit[data-type="1"],
-.fruit-ref-icon[data-type="1"] { background-image: var(--fruit-02); }
+.fruit-ref-icon[data-type="1"] {
+    width: 90px;
+    height: 90px;
+    background-position: -1000px -150px;
+}
+
+/* 2-右腿 (120px) */
 .fruit-type-2,
 .next-fruit[data-type="2"],
-.fruit-ref-icon[data-type="2"] { background-image: var(--fruit-03); }
+.fruit-ref-icon[data-type="2"] {
+    width: 120px;
+    height: 120px;
+    background-position: -1000px -10px;
+}
+
+/* 3-左腿 (150px) - 使用第一个版本 */
 .fruit-type-3,
 .next-fruit[data-type="3"],
-.fruit-ref-icon[data-type="3"] { background-image: var(--fruit-04); }
+.fruit-ref-icon[data-type="3"] {
+    width: 150px;
+    height: 150px;
+    background-position: -700px -680px;
+}
+
+/* 4-胯部 (180px) */
 .fruit-type-4,
 .next-fruit[data-type="4"],
-.fruit-ref-icon[data-type="4"] { background-image: var(--fruit-05); }
+.fruit-ref-icon[data-type="4"] {
+    width: 180px;
+    height: 180px;
+    background-position: -500px -680px;
+}
+
+/* 5-上身 (210px) */
 .fruit-type-5,
 .next-fruit[data-type="5"],
-.fruit-ref-icon[data-type="5"] { background-image: var(--fruit-06); }
+.fruit-ref-icon[data-type="5"] {
+    width: 210px;
+    height: 210px;
+    background-position: -270px -680px;
+}
+
+/* 6-头部 (240px) - 使用第一个版本 */
 .fruit-type-6,
 .next-fruit[data-type="6"],
-.fruit-ref-icon[data-type="6"] { background-image: var(--fruit-07); }
+.fruit-ref-icon[data-type="6"] {
+    width: 240px;
+    height: 240px;
+    background-position: -10px -680px;
+}
+
+/* 7-"光" (270px) - 使用第一个版本 */
 .fruit-type-7,
 .next-fruit[data-type="7"],
-.fruit-ref-icon[data-type="7"] { background-image: var(--fruit-08); }
+.fruit-ref-icon[data-type="7"] {
+    width: 270px;
+    height: 270px;
+    background-position: -710px -10px;
+}
+
+/* 8-遗子 (300px) - 使用第一个版本 */
 .fruit-type-8,
 .next-fruit[data-type="8"],
-.fruit-ref-icon[data-type="8"] { background-image: var(--fruit-09); }
+.fruit-ref-icon[data-type="8"] {
+    width: 300px;
+    height: 300px;
+    background-position: -10px -360px;
+}
+
+/* 9-？？？ (330px) - 使用第一个版本 */
 .fruit-type-9,
 .next-fruit[data-type="9"],
-.fruit-ref-icon[data-type="9"] { background-image: var(--fruit-10); }
+.fruit-ref-icon[data-type="9"] {
+    width: 330px;
+    height: 330px;
+    background-position: -10px -10px;
+}
+
+/* 额外的样式类（如果需要切换不同的精灵图位置） */
+/* 头部-第二个版本 (240px) */
+.fruit-type-6-alt {
+    width: 240px;
+    height: 240px;
+    background-position: -710px -300px;
+}
+
+/* 遗子-第二个版本 (300px) */
+.fruit-type-8-alt {
+    width: 300px;
+    height: 300px;
+    background-position: -330px -360px;
+}
+
+/* ？？？-第二个版本 (330px) */
+.fruit-type-9-alt {
+    width: 330px;
+    height: 330px;
+    background-position: -360px -10px;
+}
 
 /* 水果样式 */
 .fruit {
-    position: absolute;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    user-select: none;
-    transition: transform 0.05s ease;
-    /*border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 
-                inset 0 -8px 16px rgba(0, 0, 0, 0.2), 
-                inset 0 8px 16px rgba(255, 255, 255, 0.1);*/
-    background-size: cover;
-    background-position: center;
+    background-image: url('assets/image/css_sprites.png');
     background-repeat: no-repeat;
+    background-size: auto; /* 不要缩放精灵图 */
 }
 
 .fruit.merging {
