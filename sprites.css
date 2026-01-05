@@ -1,0 +1,35 @@
+/* sprites.css - 水果精灵图样式 */
+:root {
+  --sprite-url: url('/assets/image/css_sprites.png');
+}
+
+/* 通用精灵图类 */
+.fruit-sprite {
+  background-image: var(--sprite-url);
+  background-repeat: no-repeat;
+  background-size: auto; 
+}
+
+/* 普通状态 */
+.fruit-type-0 { width: 60px; height: 60px; background-position: -10px 0px;background-size: 2150px auto;  }
+.fruit-type-1 { width: 90px; height: 90px; background-position: -280px -10px; }
+.fruit-type-2 { width: 120px; height: 120px; background-position: -390px -10px; }
+.fruit-type-3 { width: 150px; height: 150px; background-position: -840px -10px; }
+.fruit-type-4 { width: 180px; height: 180px; background-position: -1210px -10px; }
+.fruit-type-5 { width: 210px; height: 210px; background-position: -1640px -10px; }
+.fruit-type-6 { width: 240px; height: 240px; background-position: -2130px -10px; }
+.fruit-type-7 { width: 270px; height: 270px; background-position: -2680px -10px; }
+.fruit-type-8 { width: 300px; height: 300px; background-position: -2970px -10px; }
+.fruit-type-9 { width: 330px; height: 330px; background-position: -3610px -10px; }
+
+/* 特殊状态（备用图片） */
+.fruit-type-0-special { width: 60px; height: 60px; background-position: -10px -10px; }
+.fruit-type-1-special { width: 90px; height: 90px; background-position: -170px -10px; }
+.fruit-type-2-special { width: 120px; height: 120px; background-position: -530px -10px; }
+.fruit-type-3-special { width: 150px; height: 150px; background-position: -670px -10px; }
+.fruit-type-4-special { width: 180px; height: 180px; background-position: -1010px -10px; }
+.fruit-type-5-special { width: 210px; height: 210px; background-position: -1410px -10px; }
+.fruit-type-6-special { width: 240px; height: 240px; background-position: -1870px -10px; }
+.fruit-type-7-special { width: 270px; height: 270px; background-position: -2390px -10px; }
+.fruit-type-8-special { width: 300px; height: 300px; background-position: -3290px -10px; }
+.fruit-type-9-special { width: 330px; height: 330px; background-position: -3960px -10px; }

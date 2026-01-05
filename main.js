@@ -117,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化游戏
     function initGame() {
         // 重置游戏状态
-        preloadSprite();
         gameState = {
             score: 0,
             highestScore: localStorage.getItem('highestScore') || 0,
@@ -169,7 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
         targetFruitEl.textContent = CONFIG.fruitTypes[CONFIG.fruitTypes.length - 1].name;
 
         // 创建第一个预览水果
-        createNewFruit();
+        setTimeout(() => {
+            // 创建第一个预览水果
+            createNewFruit();
+        }, 100);
 
         // 启动 Matter.js 引擎
         Runner.run(runner, engine);
@@ -206,10 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 创建 Matter.js 物理实体
         const body = Bodies.circle(x, y, fruitType.radius, {
-            restitution: 0.2,      // 弹性
-            friction: 0.05,         // 摩擦力
-            frictionAir: 0.001,     // 空气摩擦力
-            density: 0.01,        // 密度
+            restitution: 0.2,
+            friction: 0.05,
+            frictionAir: 0.001,
+            density: 0.01,
             label: 'fruit',
             render: { fillStyle: fruitType.color }
         });
@@ -217,12 +219,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // 添加自定义属性
         body.fruitType = type;
         body.isMerging = false;
-        body.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9); // 唯一ID
+        body.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         
         // 添加到世界
         World.add(world, body);
         
-        // 创建对应的 DOM 元素
+        // 创建对应的 DOM 元素（使用精灵图）
         const el = drawFruit(type, x, y);
         canvasEl.appendChild(el);
         
@@ -232,41 +234,36 @@ document.addEventListener('DOMContentLoaded', () => {
             el: el,
             type: type,
             fruitId: body.fruitId,
-            specialTimer: null, // 特殊效果定时器
-            isSpecialState: false // 是否处于特殊状态
+            specialTimer: null,
+            isSpecialState: false
         };
-        // 如果是头部或遗子，启动特殊效果
+        
+        // 特殊效果
         if (type === 6 || type === 9) { // 头部
             startHeadSpecialEffect(fruitObj);
         } 
         else if (type === 8) { // 遗子
             startYiziSpecialEffect(fruitObj);
         }
-
         
         return fruitObj;
     }
     // 切换水果图片
+    // 切换水果图片 - 精灵图版本
     function switchFruitImage(fruitObj, special) {
         if (!fruitObj.el) return;
         
         const type = fruitObj.type;
-        let imgName;
+        const baseClass = `fruit fruit-sprite fruit-type-${type}`;
         
-        if (type === 6) { // 头部
-            imgName = special ? '07_1.png' : '07.png';
-        } else if (type === 8) { // 遗子
-            imgName = special ? '09_1.png' : '09.png';
-        } else if (type === 9) { // 轮子
-            imgName = special ? '10_1.png' : '10.png';
-        } else {
-            return; // 其他水果不需要切换
-        }
+        // 移除特殊类或普通类
+        fruitObj.el.className = special ? 
+            `${baseClass} fruit-type-${type}-special` : 
+            baseClass;
         
-        // 更新图片
-        fruitObj.el.style.backgroundImage = `url('assets/image/${imgName}')`;
         fruitObj.isSpecialState = special;
     }
+    // 头部特殊效果
     // 头部特殊效果
     function startHeadSpecialEffect(fruitObj) {
         // 随机延迟：1-10秒
@@ -312,37 +309,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 绘制水果 DOM 元素 - 修改后版本
-    function drawFruit(type, x, y) {
+    // 修改绘制水果DOM元素的函数
+    function drawFruit(type, x, y, isSpecial = false) {
         const fruitType = CONFIG.fruitTypes[type];
         const fruitEl = document.createElement('div');
 
-        fruitEl.className = `fruit fruit-type-${type}`; // 添加图片类
-        // 水果类型特定ID，用于后续查找
+        // 使用精灵图类
+        const specialClass = isSpecial ? ' fruit-special' : '';
+        fruitEl.className = `fruit fruit-sprite fruit-type-${type}${specialClass}`;
+        
+        // 其他属性保持不变
         fruitEl.dataset.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         fruitEl.dataset.fruitType = type;
-        const radius = fruitType.radius;
         fruitEl.style.width = `${fruitType.radius * 2}px`;
         fruitEl.style.height = `${fruitType.radius * 2}px`;
-        
-        fruitEl.style.position = 'absolute';
+        fruitEl.style.border = '3px solid rgba(255, 0, 0, 0.3)';
+        /*fruitEl.style.position = 'absolute';
         fruitEl.style.borderRadius = '100%';
         fruitEl.style.display = 'flex';
         fruitEl.style.alignItems = 'center';
         fruitEl.style.justifyContent = 'center';
         fruitEl.style.userSelect = 'none';
         fruitEl.style.border = '3px solid rgba(0, 0, 0, 0)';
-        //fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
-        fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
-
-        // 根据类型和状态决定图片
-        //const imgNumber = String(type + 1).padStart(2, '0');
-        //fruitEl.style.backgroundImage = `url('assets/image/${imgNumber}.png')`;
-        //fruitEl.style.backgroundImage = `url('/MergeHikaru/assets/image/${imgNumber}.png')`;
-        
-        // 添加背景图片样式
-        //fruitEl.style.backgroundSize = 'cover';
-        //fruitEl.style.backgroundPosition = 'center';
-        //fruitEl.style.backgroundRepeat = 'no-repeat';
+        fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;*/
         
         return fruitEl;
     }
@@ -408,32 +397,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateNextFruit() {
         const fruitType = CONFIG.fruitTypes[gameState.nextFruitType];
         
-        // 清空内容，只显示图片
-        nextFruitEl.innerHTML = ''; // 清空可能的文字内容
-
-        // 只设置 data-type，CSS 会自动应用正确的背景位置
-        nextFruitEl.setAttribute('data-type', gameState.nextFruitType);
+        // 清空并添加精灵图类
+        nextFruitEl.innerHTML = '';
+        nextFruitEl.className = 'next-fruit fruit-sprite';
+        nextFruitEl.classList.add(`fruit-type-${gameState.nextFruitType}`);
         
-        // 设置背景图片
-        //nextFruitEl.style.backgroundImage = `url('assets/image/${String(gameState.nextFruitType + 1).padStart(2, '0')}.png')`;
-        //nextFruitEl.style.backgroundColor = 'transparent'; // 移除背景色
-        // 设置尺寸
-        const radius = fruitType.radius;
+        // 设置大小
         nextFruitEl.style.width = `${fruitType.radius}px`;
         nextFruitEl.style.height = `${fruitType.radius}px`;
-        // 基本样式
         nextFruitEl.style.backgroundColor = 'transparent';
         nextFruitEl.style.borderRadius = '50%';
         nextFruitEl.style.border = '2px solid rgba(255, 255, 255, 0.5)';
         
-        // 确保图片显示正确
-        /*nextFruitEl.style.backgroundSize = 'cover';
-        nextFruitEl.style.backgroundPosition = 'center';
-        nextFruitEl.style.backgroundRepeat = 'no-repeat';
-        nextFruitEl.style.borderRadius = '50%';
-        nextFruitEl.style.border = '2px solid rgba(255, 255, 255, 0.5)';
-        
-        nextFruitEl.setAttribute('data-type', gameState.nextFruitType);*/
+        nextFruitEl.setAttribute('data-type', gameState.nextFruitType);
     }
 
     // 生成水果参考表
@@ -445,26 +421,21 @@ document.addEventListener('DOMContentLoaded', () => {
             fruitItem.className = 'fruit-ref-item';
             
             const iconEl = document.createElement('div');
-            iconEl.className = 'fruit-ref-icon';
-            iconEl.setAttribute('data-type', index); // 设置数据类型
-
-            const radius = fruit.radius;
+            iconEl.className = `fruit-ref-icon fruit-sprite fruit-type-${index}`; // 使用精灵图类
             iconEl.style.cssText = `
-            width: ${radius}px;
-            height: ${radius}px;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-        `   ;
+                width: ${fruit.radius}px;
+                height: ${fruit.radius}px;
+                border-radius: 50%;
+                border: 2px solid white;
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            `;
             
             fruitItem.appendChild(iconEl);
             
-            // 添加水果名称
             const nameEl = document.createElement('span');
             nameEl.className = 'fruit-ref-name';
             nameEl.textContent = fruit.name;
             
-            // 添加分数
             const scoreEl = document.createElement('span');
             scoreEl.className = 'fruit-ref-score';
             scoreEl.textContent = `${fruit.score}分`;
@@ -522,21 +493,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dangerousCount >= 5) {
             endGame();
         }
-    }
-    // ========== 精灵图预加载 ==========
-    function preloadSprite() {
-        return new Promise((resolve, reject) => {
-            const sprite = new Image();
-            sprite.onload = () => {
-                console.log('精灵图加载完成');
-                resolve();
-            };
-            sprite.onerror = () => {
-                console.log('精灵图加载失败，回退到单独图片');
-                resolve(); // 即使失败也继续，会使用回退方案
-            };
-            sprite.src = 'assets/image/css_sprites.png';
-        });
     }
 
 
