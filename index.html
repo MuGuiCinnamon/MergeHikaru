@@ -15,6 +15,128 @@
      <div id="transition-mask" class="transition-mask"></div>
     <canvas id="dynamic-background"></canvas>
     <div class="container">
+        <!-- 右上角菜单按钮 -->
+    <div class="menu-container">
+        <button id="menu-toggle" class="menu-toggle-btn">
+            <i class="fas fa-bars"></i>
+            <span class="menu-text">菜单</span>
+        </button>
+    </div>
+
+    <!-- 菜单面板 -->
+    <div id="menu-panel" class="menu-panel">
+        <div class="menu-header">
+            <h3><i class="fas fa-gamepad"></i> 游戏信息</h3>
+            <button id="menu-close" class="menu-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="menu-content">
+            <!-- 统计信息 -->
+            <div class="menu-stats">
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">游戏总时长</span>
+                        <span id="total-play-time" class="stat-value">00:00:00</span>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">历史最高分</span>
+                        <span id="menu-highest-score" class="stat-value">0</span>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <i class="fas fa-cogs"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">合成轮子总数</span>
+                        <span id="total-wheel-count" class="stat-value">0</span>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">当前游戏分数</span>
+                        <span id="menu-current-score" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 分隔线 -->
+            <div class="menu-divider"></div>
+            
+            <!-- 设置选项 -->
+            <div class="menu-settings">
+                <h4><i class="fas fa-sliders-h"></i> 游戏设置</h4>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-volume-up"></i>
+                        <span>游戏音乐</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="music-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-bell"></i>
+                        <span>游戏音效</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <i class="fas fa-palette"></i>
+                        <span>特殊效果</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="effects-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 分隔线 -->
+            <div class="menu-divider"></div>
+            
+            <!-- 操作按钮 -->
+            <div class="menu-actions">
+                <button id="menu-restart" class="btn-menu-action">
+                    <i class="fas fa-redo"></i> 重新开始
+                </button>
+                
+                <button id="menu-reset-stats" class="btn-menu-action">
+                    <i class="fas fa-trash-alt"></i> 重置统计
+                </button>
+                
+                <button id="menu-about" class="btn-menu-action">
+                    <i class="fas fa-info-circle"></i> 关于游戏
+                </button>
+            </div>
+        </div>
+        
+        <!-- 版本信息 -->
+        <div class="menu-footer">
+            <p>合成大遗子 v1.0</p>
+            <p class="menu-hint">提示：按 <kbd>ESC</kbd> 键可快速关闭菜单</p>
+        </div>
+    </div>
+
+    <!-- 菜单遮罩 -->
+    <div id="menu-overlay" class="menu-overlay"></div>
         <main class="game-area">
             <div class="game-board">
                 <div id="game-canvas"></div>

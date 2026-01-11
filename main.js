@@ -77,6 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const victoryScoreEl = document.getElementById('victory-score');
     const continueBtn = document.getElementById('continue-btn');
     const cashoutBtn = document.getElementById('cashout-btn');
+    // DOM元素
+    const menuToggleBtn = document.getElementById('menu-toggle');
+    const menuCloseBtn = document.getElementById('menu-close');
+    const menuPanel = document.getElementById('menu-panel');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const musicToggle = document.getElementById('music-toggle');
+    const soundToggle = document.getElementById('sound-toggle');
+    const effectsToggle = document.getElementById('effects-toggle');
+    const menuRestartBtn = document.getElementById('menu-restart');
+    const menuResetStatsBtn = document.getElementById('menu-reset-stats');
+    const menuAboutBtn = document.getElementById('menu-about');
+
+    // 统计元素
+    const totalPlayTimeEl = document.getElementById('total-play-time');
+    const menuHighestScoreEl = document.getElementById('menu-highest-score');
+    const totalWheelCountEl = document.getElementById('total-wheel-count');
+    const menuCurrentScoreEl = document.getElementById('menu-current-score');
+
 
 
     // 音效
@@ -172,6 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateHighestScore();
         victoryModal.style.display = 'none';
         gameOverModal.style.display = 'none';
+        // 初始化菜单
+        initMenu();
 
         // 设置背景音乐
         
@@ -395,12 +415,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 更新分数显示
     function updateScore() {
         scoreEl.textContent = gameState.score;
+        // 同步到菜单
+        if (menuCurrentScoreEl) {
+            menuCurrentScoreEl.textContent = gameState.score;
+        }
         
         // 更新最高分
         if (gameState.score > gameState.highestScore) {
             gameState.highestScore = gameState.score;
             localStorage.setItem('highestScore', gameState.highestScore);
             updateHighestScore();
+            // 同步到菜单
+            if (menuHighestScoreEl) {
+                menuHighestScoreEl.textContent = gameState.highestScore;
+            }
         }
     }
 
@@ -458,6 +486,222 @@ document.addEventListener('DOMContentLoaded', () => {
             fruitReferenceList.appendChild(fruitItem);
         });
     }
+
+
+    // 游戏统计状态
+    const gameStats = {
+        totalPlayTime: 0, // 总游戏时长（秒）
+        totalWheelCount: parseInt(localStorage.getItem('totalWheelCount')) || 0, // 总轮子数
+        sessionStartTime: Date.now(), // 本次会话开始时间
+        isMenuOpen: false
+    };
+
+    // 初始化菜单
+    function initMenu() {
+        // 从localStorage加载统计数据
+        const savedPlayTime = localStorage.getItem('totalPlayTime');
+        if (savedPlayTime) {
+            gameStats.totalPlayTime = parseInt(savedPlayTime);
+        }
+        
+        // 更新显示
+        updateMenuStats();
+        
+        // 设置音乐开关初始状态
+        musicToggle.checked = gameState.isMusicOn;
+        soundToggle.checked = gameState.isSoundOn;
+        effectsToggle.checked = true; // 默认开启特效
+        
+        // 每秒钟更新一次游戏时长
+        setInterval(() => {
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                gameStats.totalPlayTime++;
+                localStorage.setItem('totalPlayTime', gameStats.totalPlayTime);
+                updateMenuStats();
+            }
+        }, 1000);
+    }
+
+    // 更新菜单统计信息
+    function updateMenuStats() {
+        // 格式化游戏时长
+        const hours = Math.floor(gameStats.totalPlayTime / 3600);
+        const minutes = Math.floor((gameStats.totalPlayTime % 3600) / 60);
+        const seconds = gameStats.totalPlayTime % 60;
+        totalPlayTimeEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // 更新最高分
+        menuHighestScoreEl.textContent = gameState.highestScore;
+        
+        // 更新总轮子数（包括历史记录）
+        const totalWheels = gameStats.totalWheelCount + gameState.watermelonCount;
+        totalWheelCountEl.textContent = totalWheels;
+        
+        // 更新当前分数
+        menuCurrentScoreEl.textContent = gameState.score;
+    }
+
+    // 打开菜单
+    function openMenu() {
+        menuPanel.classList.add('open');
+        menuOverlay.classList.add('active');
+        gameStats.isMenuOpen = true;
+        
+        // 更新按钮文本
+        menuToggleBtn.innerHTML = '<i class="fas fa-times"></i><span class="menu-text">关闭</span>';
+        
+        // 暂停游戏（如果正在运行）
+        if (!gameState.isPaused && !gameState.isGameOver) {
+            gameState.wasPausedByMenu = false; // 标记菜单导致的暂停
+            pauseGame();
+        }
+    }
+
+    // 关闭菜单
+    function closeMenu() {
+        menuPanel.classList.remove('open');
+        menuOverlay.classList.remove('active');
+        gameStats.isMenuOpen = false;
+        
+        // 恢复按钮文本
+        menuToggleBtn.innerHTML = '<i class="fas fa-bars"></i><span class="menu-text">菜单</span>';
+        
+        // 如果菜单导致暂停，恢复游戏
+        if (gameState.wasPausedByMenu === false && !gameState.isGameOver) {
+            resumeGame();
+        }
+    }
+
+    // 切换菜单
+    function toggleMenu() {
+        if (gameStats.isMenuOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    // 暂停游戏（用于菜单）
+    function pauseGame() {
+        gameState.wasPausedByMenu = true;
+        gameState.isPaused = true;
+        Runner.stop(runner);
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        
+        if (gameState.isMusicOn) {
+            backgroundMusic.pause();
+        }
+    }
+
+    // 恢复游戏（从菜单恢复）
+    function resumeGame() {
+        gameState.wasPausedByMenu = false;
+        gameState.isPaused = false;
+        Runner.run(runner, engine);
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
+        
+        if (gameState.isMusicOn) {
+            backgroundMusic.play().catch(e => console.log('背景音乐恢复失败'));
+        }
+    }
+
+    // 事件监听器
+    menuToggleBtn.addEventListener('click', toggleMenu);
+    menuCloseBtn.addEventListener('click', closeMenu);
+
+    // 点击遮罩关闭菜单
+    menuOverlay.addEventListener('click', closeMenu);
+
+    // ESC键关闭菜单
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && gameStats.isMenuOpen) {
+            closeMenu();
+            e.preventDefault();
+        }
+        
+        // M键快速打开菜单
+        if (e.key === 'm' || e.key === 'M') {
+            if (!gameStats.isMenuOpen) {
+                openMenu();
+                e.preventDefault();
+            }
+        }
+    });
+
+    // 音乐开关
+    musicToggle.addEventListener('change', function() {
+        gameState.isMusicOn = this.checked;
+        localStorage.setItem('isMusicOn', this.checked);
+        
+        if (this.checked) {
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败'));
+            }
+        } else {
+            backgroundMusic.pause();
+        }
+    });
+
+    // 音效开关
+    soundToggle.addEventListener('change', function() {
+        gameState.isSoundOn = this.checked;
+        localStorage.setItem('isSoundOn', this.checked);
+    });
+
+    // 特效开关
+    effectsToggle.addEventListener('change', function() {
+        const enabled = this.checked;
+        // 这里可以添加特效开关逻辑
+        console.log('特效开关:', enabled ? '开启' : '关闭');
+        localStorage.setItem('effectsEnabled', enabled);
+    });
+
+    // 重新开始游戏
+    menuRestartBtn.addEventListener('click', function() {
+        closeMenu();
+        setTimeout(() => {
+            restartBtn.click(); // 使用现有的重新开始按钮功能
+        }, 300);
+    });
+
+    // 重置统计数据
+    menuResetStatsBtn.addEventListener('click', function() {
+        if (confirm('确定要重置所有游戏统计数据吗？此操作不可撤销。')) {
+            // 重置本地存储
+            localStorage.removeItem('totalPlayTime');
+            localStorage.removeItem('totalWheelCount');
+            localStorage.removeItem('highestScore');
+            
+            // 重置内存中的统计数据
+            gameStats.totalPlayTime = 0;
+            gameStats.totalWheelCount = 0;
+            gameState.highestScore = 0;
+            
+            // 更新显示
+            updateMenuStats();
+            updateHighestScore();
+            
+            // 显示确认消息
+            alert('统计数据已重置！');
+            closeMenu();
+        }
+    });
+
+    // 关于按钮
+    menuAboutBtn.addEventListener('click', function() {
+        closeMenu();
+        setTimeout(() => {
+            alert('合成大遗子 v1.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME\n\n祝您游戏愉快！');
+        }, 300);
+    });
+
+    // 在水果合成时更新轮子总数
+    function updateWheelCount() {
+        gameStats.totalWheelCount += gameState.watermelonCount;
+        localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
+        updateMenuStats();
+    }
+
 
     // 显示胜利界面
     function showVictoryModal() {
@@ -628,6 +872,9 @@ document.addEventListener('DOMContentLoaded', () => {
         //if (victoryModal.style.display === 'flex') {
         //    victoryModal.style.display = 'none';
         //}
+        // 保存轮子总数
+        gameStats.totalWheelCount += gameState.watermelonCount;
+        localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
         
         // 更新最终分数
         finalScoreEl.textContent = gameState.score;
@@ -729,6 +976,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 如果是最终水果，增加计数
                 if (nextType === CONFIG.fruitTypes.length - 1) {
                     gameState.watermelonCount++;
+                    gameStats.totalWheelCount++;
+                    localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
+                    updateMenuStats();
                     // 如果是第一次合成轮子，显示胜利界面
                     setTimeout(() => {
                         if (!gameState.hasShownVictory && gameState.watermelonCount === 1) {
