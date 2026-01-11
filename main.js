@@ -547,8 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menuOverlay.classList.add('active');
         gameStats.isMenuOpen = true;
         
-        // 更新按钮文本
-        menuToggleBtn.innerHTML = '<i class="fas fa-times"></i><span class="menu-text">关闭</span>';
+
         
         // 暂停游戏（如果正在运行）
         if (!gameState.isPaused && !gameState.isGameOver) {
@@ -563,8 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
         menuOverlay.classList.remove('active');
         gameStats.isMenuOpen = false;
         
-        // 恢复按钮文本
-        menuToggleBtn.innerHTML = '<i class="fas fa-bars"></i><span class="menu-text">菜单</span>';
         
         // 如果菜单导致暂停，恢复游戏
         if (gameState.wasPausedByMenu === false && !gameState.isGameOver) {
@@ -691,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menuAboutBtn.addEventListener('click', function() {
         closeMenu();
         setTimeout(() => {
-            alert('合成大遗子 v1.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME\n\n祝您游戏愉快！');
+            alert('合成大遗子 v2.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME，漫画本体\n\n祝您游戏愉快！');
         }, 300);
     });
 
@@ -1152,24 +1149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
 
-    soundBtn.addEventListener('click', () => {
-        gameState.isSoundOn = !gameState.isSoundOn;
-        gameState.isMusicOn = gameState.isSoundOn; // 背景音乐与音效同步
-        
-        soundBtn.innerHTML = gameState.isSoundOn ? 
-            '<i class="fas fa-volume-up"></i> 音乐' : 
-            '<i class="fas fa-volume-mute"></i> 音乐';
-        
-        // 控制背景音乐
-        if (gameState.isMusicOn) {
-            backgroundMusic.volume = gameState.backgroundMusicVolume;
-            if (!gameState.isPaused && !gameState.isGameOver) {
-                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
-            }
-        } else {
-            backgroundMusic.pause();
-        }
-    });
+
     
     playAgainBtn.addEventListener('click', initGame);
     continueBtn.addEventListener('click', continueGame);

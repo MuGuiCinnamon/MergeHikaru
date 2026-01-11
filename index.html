@@ -19,7 +19,6 @@
     <div class="menu-container">
         <button id="menu-toggle" class="menu-toggle-btn">
             <i class="fas fa-bars"></i>
-            <span class="menu-text">菜单</span>
         </button>
     </div>
 
@@ -130,7 +129,7 @@
         
         <!-- 版本信息 -->
         <div class="menu-footer">
-            <p>合成大遗子 v1.0</p>
+            <p>合成大遗子 v2.0</p>
             <p class="menu-hint">提示：按 <kbd>ESC</kbd> 键可快速关闭菜单</p>
         </div>
     </div>
@@ -145,21 +144,21 @@
                     <button id="restart-btn" class="btn btn-restart">
                         <i class="fas fa-redo"></i> 重来
                     </button>
+                    <div class="btn btn-sound">
+                        
+                        <div id="next-fruit" class="next-fruit" data-type="0"></div>
+                        <span class="next-label">下一个:</span>
+                    </div>
                     <button id="pause-btn" class="btn btn-pause">
                         <i class="fas fa-pause"></i> 暂停
                     </button>
-                    <button id="sound-btn" class="btn btn-sound">
-                        <i class="fas fa-volume-up"></i> 音乐
-                    </button>
+
                 </div>
             </div>
 
             <div class="instructions">
                 <div class="game-info">
-                    <div class="next-fruit-container">
-                        <span class="next-label">下一个:</span>
-                        <div id="next-fruit" class="next-fruit" data-type="0"></div>
-                    </div>
+                    
                     <div class="score-container">
                         <span class="score-label">分数:</span>
                         <span id="score" class="score-value">0</span>
@@ -248,7 +247,7 @@
     </div>
     <footer class="footer">
         <p> · 同人制作 · </p>
-        <p> 素材来源：pixabay， 爱给网， DOVA-SYNDROME</p>
+        <p> 素材来源：pixabay， 爱给网， DOVA-SYNDROME，漫画本体</p>
     </footer>
 
     <!-- 音效 -->
