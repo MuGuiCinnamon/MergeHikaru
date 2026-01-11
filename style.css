@@ -416,6 +416,42 @@ body {
     to { opacity: 1; }
 }
 
+/* ========== 转场遮罩动画 ========== */
+.transition-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: 999; /* 比所有界面都高 */
+    pointer-events: none; /* 不阻挡点击 */
+    opacity: 0;
+    transition: opacity 0.5s ease, background 0.5s ease;
+}
+
+.transition-mask.active {
+    pointer-events: auto; /* 激活时阻挡点击 */
+    opacity: 1;
+    background: rgba(0, 0, 0, 1); /* 全黑 */
+}
+/* 遮罩淡出动画 */
+.transition-mask.fade-out {
+    animation: maskFadeOut 0.5s ease 0.8s forwards;
+}
+
+@keyframes maskFadeOut {
+    0% {
+        opacity: 1;
+        background: rgba(0, 0, 0, 1);
+    }
+    100% {
+        opacity: 0;
+        background: rgba(0, 0, 0, 0);
+        pointer-events: none;
+    }
+}
+
 /* 胜利动画 */
 .victory-animation {
     position: relative;
@@ -480,6 +516,40 @@ body {
         transform: translateY(-100px) rotate(360deg);
         opacity: 0;
     }
+}
+/* ========== 胜利界面消失动画 ========== */
+.victory-modal.hiding {
+    animation: fadeOutUp 0.5s ease-in forwards;
+}
+
+.victory-modal.hiding .modal-content {
+    animation: scaleOut 0.5s ease-in forwards;
+}
+
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden; /* 动画结束后隐藏 */
+    }
+}
+
+@keyframes scaleOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* 确保动画结束后元素不可点击 */
+.victory-modal.hiding {
+    pointer-events: none;
 }
 
 /* 胜利消息 */

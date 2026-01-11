@@ -462,6 +462,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 显示胜利界面
     function showVictoryModal() {
         if (gameState.isGameOver) return;
+        const modal = document.getElementById('victory-modal');
+    
+        // 确保移除之前的动画类
+        modal.classList.remove('hiding');
         
         // 暂停游戏
         gameState.isPaused = true;
@@ -486,7 +490,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 隐藏胜利界面
     function hideVictoryModal() {
-        victoryModal.style.display = 'none';
+        const modal = document.getElementById('victory-modal');
+        
+        // 添加隐藏动画类
+        modal.classList.add('hiding');
+        
+        // 动画结束后完全隐藏
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('hiding'); // 移除动画类以便下次使用
+        }, 500); // 与动画时间一致
     }
 
     // 继续游戏
@@ -501,11 +514,55 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundMusic.play().catch(e => console.log('背景音乐恢复失败'));
         }
     }
+    // ========== 转场动画函数 ==========
+    function transitionToGameOver() {
+        const victoryModal = document.getElementById('victory-modal');
+        const gameOverModal = document.getElementById('game-over');
+        const transitionMask = document.getElementById('transition-mask');
+        
+        // 1. 开始转场：激活黑色遮罩
+        transitionMask.classList.add('active');
+        
+        // 2. 胜利界面淡出
+        victoryModal.classList.add('fade-out');
+
+        
+        // 稍等片刻，然后隐藏胜利界面
+        setTimeout(() => {
+            victoryModal.style.display = 'none';
+            victoryModal.classList.remove('fade-out');
+            
+            // 3. 显示游戏结束界面（带淡入动画）
+            gameOverModal.style.display = 'flex';
+            gameOverModal.classList.add('fade-in');
+            
+            // 更新游戏结束界面的分数
+            finalScoreEl.textContent = gameState.score;
+            watermelonCountEl.textContent = gameState.watermelonCount;
+            highestScoreEl.textContent = gameState.highestScore;
+            
+        }, 500); // 等待胜利界面淡出动画完成
+        
+        // 4. 遮罩淡出，显示游戏结束界面
+        setTimeout(() => {
+            transitionMask.classList.remove('active');
+            transitionMask.classList.add('fade-out');
+            
+            // 动画完成后移除fade-out类
+            setTimeout(() => {
+                transitionMask.classList.remove('fade-out');
+            }, 800);
+            
+        }, 800); // 等待游戏结束界面淡入后开始遮罩淡出
+    }
 
     // 立即结算
     function cashoutGame() {
-        hideVictoryModal();
-        endGame(); // 使用现有的游戏结束逻辑
+            // 隐藏胜利界面（无动画，直接隐藏）
+
+        
+        // 使用转场动画显示游戏结束界面
+        transitionToGameOver();
     }
 
     // 检查游戏结束
@@ -567,7 +624,10 @@ document.addEventListener('DOMContentLoaded', () => {
         Runner.stop(runner);
 
         // 隐藏胜利界面（如果显示着）
-        victoryModal.style.display = 'none';
+        //const victoryModal = document.getElementById('victory-modal');
+        //if (victoryModal.style.display === 'flex') {
+        //    victoryModal.style.display = 'none';
+        //}
         
         // 更新最终分数
         finalScoreEl.textContent = gameState.score;
