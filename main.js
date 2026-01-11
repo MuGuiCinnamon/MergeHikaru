@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { name: '？？？', radius: 110, color: '#276749', score: 640 }
         ],
         nextFruitTypes: [0, 1, 2, 3],
-        warningLineHeight: 110  // 警戒线高度
+        warningLineHeight: 10  // 警戒线高度
     };
 
     // 游戏状态
@@ -50,7 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isAboutToEnd:false,
         dangerCounter:0,
         isMusicOn: true,
-        backgroundMusicVolume: 0.5 
+        backgroundMusicVolume: 0.5,
+        victoryAchieved: false,        
+        startTime: Date.now(),         
+        victoryTime: 0,                
+        hasShownVictory: false,        
 
     };
 
@@ -68,6 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverModal = document.getElementById('game-over');
     const fruitReferenceList = document.getElementById('fruit-reference-list');
     const targetFruitEl = document.getElementById('target-fruit');
+    const victoryModal = document.getElementById('victory-modal');
+    const victoryTimeEl = document.getElementById('victory-time');
+    const victoryScoreEl = document.getElementById('victory-score');
+    const continueBtn = document.getElementById('continue-btn');
+    const cashoutBtn = document.getElementById('cashout-btn');
+    // DOM元素
+    const menuToggleBtn = document.getElementById('menu-toggle');
+    const menuCloseBtn = document.getElementById('menu-close');
+    const menuPanel = document.getElementById('menu-panel');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const musicToggle = document.getElementById('music-toggle');
+    const soundToggle = document.getElementById('sound-toggle');
+    const effectsToggle = document.getElementById('effects-toggle');
+    const menuRestartBtn = document.getElementById('menu-restart');
+    const menuResetStatsBtn = document.getElementById('menu-reset-stats');
+    const menuAboutBtn = document.getElementById('menu-about');
+
+    // 统计元素
+    const totalPlayTimeEl = document.getElementById('total-play-time');
+    const menuHighestScoreEl = document.getElementById('menu-highest-score');
+    const totalWheelCountEl = document.getElementById('total-wheel-count');
+    const menuCurrentScoreEl = document.getElementById('menu-current-score');
+
+
 
     // 音效
     const mergeSound = document.getElementById('merge-sound');
@@ -130,7 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
             gameSpeed: 1,
             isGameFocused: false,
             isMusicOn: true,
-            backgroundMusicVolume: 0.5
+            backgroundMusicVolume: 0.5,
+            victoryAchieved: false,
+            startTime: Date.now(),
+            victoryTime: 0,
+            hasShownVictory: false,
+            watermelonCount: 0, // 确保重置计数
         };
 
         
@@ -155,7 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         updateNextFruit();
         updateHighestScore();
+        victoryModal.style.display = 'none';
         gameOverModal.style.display = 'none';
+        // 初始化菜单
+        initMenu();
 
         // 设置背景音乐
         
@@ -168,7 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         targetFruitEl.textContent = CONFIG.fruitTypes[CONFIG.fruitTypes.length - 1].name;
 
         // 创建第一个预览水果
-        createNewFruit();
+        setTimeout(() => {
+            // 创建第一个预览水果
+            createNewFruit();
+        }, 100);
 
         // 启动 Matter.js 引擎
         Runner.run(runner, engine);
@@ -205,10 +244,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 创建 Matter.js 物理实体
         const body = Bodies.circle(x, y, fruitType.radius, {
-            restitution: 0.2,      // 弹性
-            friction: 0.05,         // 摩擦力
-            frictionAir: 0.001,     // 空气摩擦力
-            density: 0.01,        // 密度
+            restitution: 0.2,
+            friction: 0.05,
+            frictionAir: 0.001,
+            density: 0.01,
             label: 'fruit',
             render: { fillStyle: fruitType.color }
         });
@@ -216,13 +255,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 添加自定义属性
         body.fruitType = type;
         body.isMerging = false;
-        body.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9); // 唯一ID
+        body.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         
         // 添加到世界
         World.add(world, body);
         
-        // 创建对应的 DOM 元素
-        const el = drawFruit(type, x, y);
+        // 创建对应的 DOM 元素（使用精灵图）
+        const el = drawFruit(type, x, y, false); // 初始不是特殊状态
         canvasEl.appendChild(el);
         
         // 保存到游戏状态
@@ -231,41 +270,36 @@ document.addEventListener('DOMContentLoaded', () => {
             el: el,
             type: type,
             fruitId: body.fruitId,
-            specialTimer: null, // 特殊效果定时器
-            isSpecialState: false // 是否处于特殊状态
+            specialTimer: null,
+            isSpecialState: false
         };
-        // 如果是头部或遗子，启动特殊效果
+        
+        // 特殊效果
         if (type === 6 || type === 9) { // 头部
             startHeadSpecialEffect(fruitObj);
         } 
         else if (type === 8) { // 遗子
             startYiziSpecialEffect(fruitObj);
         }
-
         
         return fruitObj;
     }
     // 切换水果图片
+    // 切换水果图片 - 精灵图版本
     function switchFruitImage(fruitObj, special) {
         if (!fruitObj.el) return;
         
         const type = fruitObj.type;
-        let imgName;
+        const baseClass = `fruit fruit-sprite fruit-game fruit-type-${type}`;
         
-        if (type === 6) { // 头部
-            imgName = special ? '07_1.png' : '07.png';
-        } else if (type === 8) { // 遗子
-            imgName = special ? '09_1.png' : '09.png';
-        } else if (type === 9) { // 轮子
-            imgName = special ? '10_1.png' : '10.png';
-        } else {
-            return; // 其他水果不需要切换
-        }
+        // 移除特殊类或普通类
+        fruitObj.el.className = special ? 
+            `${baseClass} fruit-type-${type}-special` : 
+            baseClass;
         
-        // 更新图片
-        fruitObj.el.style.backgroundImage = `url('assets/image/${imgName}')`;
         fruitObj.isSpecialState = special;
     }
+    // 头部特殊效果
     // 头部特殊效果
     function startHeadSpecialEffect(fruitObj) {
         // 随机延迟：1-10秒
@@ -311,35 +345,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 绘制水果 DOM 元素 - 修改后版本
-    function drawFruit(type, x, y) {
+    // 修改绘制水果DOM元素的函数
+    function drawFruit(type, x, y, isSpecial = false) {
         const fruitType = CONFIG.fruitTypes[type];
         const fruitEl = document.createElement('div');
 
-        fruitEl.className = `fruit fruit-type-${type}`; // 添加图片类
-        // 水果类型特定ID，用于后续查找
+        // 使用精灵图类
+        const specialClass = isSpecial ? ' fruit-type-${type}-special' : '';
+        fruitEl.className = `fruit fruit-sprite fruit-game fruit-type-${type}${specialClass}`;
+        
+        // 其他属性保持不变
         fruitEl.dataset.fruitId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         fruitEl.dataset.fruitType = type;
         fruitEl.style.width = `${fruitType.radius * 2}px`;
         fruitEl.style.height = `${fruitType.radius * 2}px`;
+
+        //fruitEl.style.border = '3px solid rgba(255, 0, 0, 0.3)';
         fruitEl.style.position = 'absolute';
         fruitEl.style.borderRadius = '100%';
-        fruitEl.style.display = 'flex';
+        /*fruitEl.style.display = 'flex';
         fruitEl.style.alignItems = 'center';
         fruitEl.style.justifyContent = 'center';
         fruitEl.style.userSelect = 'none';
-        fruitEl.style.border = '3px solid rgba(0, 0, 0, 0)';
-        //fruitEl.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3), inset 0 -8px 16px rgba(0, 0, 0, 0.2), inset 0 8px 16px rgba(255, 255, 255, 0.1)';
+        fruitEl.style.border = '3px solid rgba(0, 0, 0, 0)';*/
         fruitEl.style.transform = `translate(${x - fruitType.radius}px, ${y - fruitType.radius}px)`;
-
-        // 根据类型和状态决定图片
-        const imgNumber = String(type + 1).padStart(2, '0');
-        fruitEl.style.backgroundImage = `url('assets/image/${imgNumber}.png')`;
-        //fruitEl.style.backgroundImage = `url('/MergeHikaru/assets/image/${imgNumber}.png')`;
-        
-        // 添加背景图片样式
-        fruitEl.style.backgroundSize = 'cover';
-        fruitEl.style.backgroundPosition = 'center';
-        fruitEl.style.backgroundRepeat = 'no-repeat';
         
         return fruitEl;
     }
@@ -386,12 +415,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 更新分数显示
     function updateScore() {
         scoreEl.textContent = gameState.score;
+        // 同步到菜单
+        if (menuCurrentScoreEl) {
+            menuCurrentScoreEl.textContent = gameState.score;
+        }
         
         // 更新最高分
         if (gameState.score > gameState.highestScore) {
             gameState.highestScore = gameState.score;
             localStorage.setItem('highestScore', gameState.highestScore);
             updateHighestScore();
+            // 同步到菜单
+            if (menuHighestScoreEl) {
+                menuHighestScoreEl.textContent = gameState.highestScore;
+            }
         }
     }
 
@@ -405,22 +442,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateNextFruit() {
         const fruitType = CONFIG.fruitTypes[gameState.nextFruitType];
         
-        // 清空内容，只显示图片
-        nextFruitEl.innerHTML = ''; // 清空可能的文字内容
+        // 清空并添加精灵图类
+        nextFruitEl.innerHTML = '';
+        nextFruitEl.className = 'next-fruit fruit-sprite fruit-next';
+        nextFruitEl.classList.add(`fruit-type-${gameState.nextFruitType}`);
         
-        // 设置背景图片
-        nextFruitEl.style.backgroundImage = `url('assets/image/${String(gameState.nextFruitType + 1).padStart(2, '0')}.png')`;
-        nextFruitEl.style.backgroundColor = 'transparent'; // 移除背景色
-        nextFruitEl.style.width = `${fruitType.radius}px`;
-        nextFruitEl.style.height = `${fruitType.radius}px`;
-        
-        // 确保图片显示正确
-        nextFruitEl.style.backgroundSize = 'cover';
-        nextFruitEl.style.backgroundPosition = 'center';
-        nextFruitEl.style.backgroundRepeat = 'no-repeat';
+        // 设置大小
         nextFruitEl.style.borderRadius = '50%';
         nextFruitEl.style.border = '2px solid rgba(255, 255, 255, 0.5)';
-        
+        nextFruitEl.style.display = 'block'; 
         nextFruitEl.setAttribute('data-type', gameState.nextFruitType);
     }
 
@@ -433,28 +463,19 @@ document.addEventListener('DOMContentLoaded', () => {
             fruitItem.className = 'fruit-ref-item';
             
             const iconEl = document.createElement('div');
-            iconEl.className = 'fruit-ref-icon';
-            iconEl.setAttribute('data-type', index); // 设置数据类型
+            iconEl.className = `fruit-ref-icon fruit-sprite fruit-ref fruit-type-${index}`; // 使用精灵图类
             iconEl.style.cssText = `
-                width: ${fruit.radius}px;
-                height: ${fruit.radius}px;
                 border-radius: 50%;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-image: url('assets/image/${String(index + 1).padStart(2, '0')}.png');
-                border: 2px solid white;
+                
                 box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
             `;
             
             fruitItem.appendChild(iconEl);
             
-            // 添加水果名称
             const nameEl = document.createElement('span');
             nameEl.className = 'fruit-ref-name';
             nameEl.textContent = fruit.name;
             
-            // 添加分数
             const scoreEl = document.createElement('span');
             scoreEl.className = 'fruit-ref-score';
             scoreEl.textContent = `${fruit.score}分`;
@@ -466,53 +487,374 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // 游戏统计状态
+    const gameStats = {
+        totalPlayTime: 0, // 总游戏时长（秒）
+        totalWheelCount: parseInt(localStorage.getItem('totalWheelCount')) || 0, // 总轮子数
+        sessionStartTime: Date.now(), // 本次会话开始时间
+        isMenuOpen: false
+    };
+
+    // 初始化菜单
+    function initMenu() {
+        // 从localStorage加载统计数据
+        const savedPlayTime = localStorage.getItem('totalPlayTime');
+        if (savedPlayTime) {
+            gameStats.totalPlayTime = parseInt(savedPlayTime);
+        }
+        
+        // 更新显示
+        updateMenuStats();
+        
+        // 设置音乐开关初始状态
+        musicToggle.checked = gameState.isMusicOn;
+        soundToggle.checked = gameState.isSoundOn;
+        effectsToggle.checked = true; // 默认开启特效
+        
+        // 每秒钟更新一次游戏时长
+        setInterval(() => {
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                gameStats.totalPlayTime++;
+                localStorage.setItem('totalPlayTime', gameStats.totalPlayTime);
+                updateMenuStats();
+            }
+        }, 1000);
+    }
+
+    // 更新菜单统计信息
+    function updateMenuStats() {
+        // 格式化游戏时长
+        const hours = Math.floor(gameStats.totalPlayTime / 3600);
+        const minutes = Math.floor((gameStats.totalPlayTime % 3600) / 60);
+        const seconds = gameStats.totalPlayTime % 60;
+        totalPlayTimeEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // 更新最高分
+        menuHighestScoreEl.textContent = gameState.highestScore;
+        
+        // 更新总轮子数（包括历史记录）
+        const totalWheels = gameStats.totalWheelCount + gameState.watermelonCount;
+        totalWheelCountEl.textContent = totalWheels;
+        
+        // 更新当前分数
+        menuCurrentScoreEl.textContent = gameState.score;
+    }
+
+    // 打开菜单
+    function openMenu() {
+        menuPanel.classList.add('open');
+        menuOverlay.classList.add('active');
+        gameStats.isMenuOpen = true;
+        
+
+        
+        // 暂停游戏（如果正在运行）
+        if (!gameState.isPaused && !gameState.isGameOver) {
+            gameState.wasPausedByMenu = false; // 标记菜单导致的暂停
+            pauseGame();
+        }
+    }
+
+    // 关闭菜单
+    function closeMenu() {
+        menuPanel.classList.remove('open');
+        menuOverlay.classList.remove('active');
+        gameStats.isMenuOpen = false;
+        
+        
+        // 如果菜单导致暂停，恢复游戏
+        if (gameState.wasPausedByMenu === false && !gameState.isGameOver) {
+            resumeGame();
+        }
+    }
+
+    // 切换菜单
+    function toggleMenu() {
+        if (gameStats.isMenuOpen) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    // 暂停游戏（用于菜单）
+    function pauseGame() {
+        gameState.wasPausedByMenu = true;
+        gameState.isPaused = true;
+        Runner.stop(runner);
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        
+        if (gameState.isMusicOn) {
+            backgroundMusic.pause();
+        }
+    }
+
+    // 恢复游戏（从菜单恢复）
+    function resumeGame() {
+        gameState.wasPausedByMenu = false;
+        gameState.isPaused = false;
+        Runner.run(runner, engine);
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
+        
+        if (gameState.isMusicOn) {
+            backgroundMusic.play().catch(e => console.log('背景音乐恢复失败'));
+        }
+    }
+
+    // 事件监听器
+    menuToggleBtn.addEventListener('click', toggleMenu);
+    menuCloseBtn.addEventListener('click', closeMenu);
+
+    // 点击遮罩关闭菜单
+    menuOverlay.addEventListener('click', closeMenu);
+
+    // ESC键关闭菜单
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && gameStats.isMenuOpen) {
+            closeMenu();
+            e.preventDefault();
+        }
+        
+        // M键快速打开菜单
+        if (e.key === 'm' || e.key === 'M') {
+            if (!gameStats.isMenuOpen) {
+                openMenu();
+                e.preventDefault();
+            }
+        }
+    });
+
+    // 音乐开关
+    musicToggle.addEventListener('change', function() {
+        gameState.isMusicOn = this.checked;
+        localStorage.setItem('isMusicOn', this.checked);
+        
+        if (this.checked) {
+            if (!gameState.isPaused && !gameState.isGameOver) {
+                backgroundMusic.play().catch(e => console.log('背景音乐播放失败'));
+            }
+        } else {
+            backgroundMusic.pause();
+        }
+    });
+
+    // 音效开关
+    soundToggle.addEventListener('change', function() {
+        gameState.isSoundOn = this.checked;
+        localStorage.setItem('isSoundOn', this.checked);
+    });
+
+    // 特效开关
+    effectsToggle.addEventListener('change', function() {
+        const enabled = this.checked;
+        // 这里可以添加特效开关逻辑
+        console.log('特效开关:', enabled ? '开启' : '关闭');
+        localStorage.setItem('effectsEnabled', enabled);
+    });
+
+    // 重新开始游戏
+    menuRestartBtn.addEventListener('click', function() {
+        closeMenu();
+        setTimeout(() => {
+            restartBtn.click(); // 使用现有的重新开始按钮功能
+        }, 300);
+    });
+
+    // 重置统计数据
+    menuResetStatsBtn.addEventListener('click', function() {
+        if (confirm('确定要重置所有游戏统计数据吗？此操作不可撤销。')) {
+            // 重置本地存储
+            localStorage.removeItem('totalPlayTime');
+            localStorage.removeItem('totalWheelCount');
+            localStorage.removeItem('highestScore');
+            
+            // 重置内存中的统计数据
+            gameStats.totalPlayTime = 0;
+            gameStats.totalWheelCount = 0;
+            gameState.highestScore = 0;
+            
+            // 更新显示
+            updateMenuStats();
+            updateHighestScore();
+            
+            // 显示确认消息
+            alert('统计数据已重置！');
+            closeMenu();
+        }
+    });
+
+    // 关于按钮
+    menuAboutBtn.addEventListener('click', function() {
+        closeMenu();
+        setTimeout(() => {
+            alert('合成大遗子 v2.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME，漫画本体\n\n祝您游戏愉快！');
+        }, 300);
+    });
+
+    // 在水果合成时更新轮子总数
+    function updateWheelCount() {
+        gameStats.totalWheelCount += gameState.watermelonCount;
+        localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
+        updateMenuStats();
+    }
+
+
+    // 显示胜利界面
+    function showVictoryModal() {
+        if (gameState.isGameOver) return;
+        const modal = document.getElementById('victory-modal');
+    
+        // 确保移除之前的动画类
+        modal.classList.remove('hiding');
+        
+        // 暂停游戏
+        gameState.isPaused = true;
+        Runner.stop(runner);
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        
+        // 更新界面信息
+        victoryTimeEl.textContent = gameState.victoryTime;
+        victoryScoreEl.textContent = gameState.score;
+        
+        // 播放胜利音效
+        if (gameState.isSoundOn) {
+            // 可以添加专门的胜利音效
+            const victorySound = new Audio('assets/audio/victory.mp3');
+            victorySound.volume = 0.5;
+            victorySound.play().catch(e => console.log('胜利音效播放失败'));
+        }
+        
+        // 显示界面
+        victoryModal.style.display = 'flex';
+    }
+
+    // 隐藏胜利界面
+    function hideVictoryModal() {
+        const modal = document.getElementById('victory-modal');
+        
+        // 添加隐藏动画类
+        modal.classList.add('hiding');
+        
+        // 动画结束后完全隐藏
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('hiding'); // 移除动画类以便下次使用
+        }, 500); // 与动画时间一致
+    }
+
+    // 继续游戏
+    function continueGame() {
+        hideVictoryModal();
+        gameState.isPaused = false;
+        Runner.run(runner, engine);
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
+        
+        // 恢复背景音乐
+        if (gameState.isMusicOn) {
+            backgroundMusic.play().catch(e => console.log('背景音乐恢复失败'));
+        }
+    }
+    // ========== 转场动画函数 ==========
+    function transitionToGameOver() {
+        const victoryModal = document.getElementById('victory-modal');
+        const gameOverModal = document.getElementById('game-over');
+        const transitionMask = document.getElementById('transition-mask');
+        
+        // 1. 开始转场：激活黑色遮罩
+        transitionMask.classList.add('active');
+        
+        // 2. 胜利界面淡出
+        victoryModal.classList.add('fade-out');
+
+        
+        // 稍等片刻，然后隐藏胜利界面
+        setTimeout(() => {
+            victoryModal.style.display = 'none';
+            victoryModal.classList.remove('fade-out');
+            
+            // 3. 显示游戏结束界面（带淡入动画）
+            gameOverModal.style.display = 'flex';
+            gameOverModal.classList.add('fade-in');
+            
+            // 更新游戏结束界面的分数
+            finalScoreEl.textContent = gameState.score;
+            watermelonCountEl.textContent = gameState.watermelonCount;
+            highestScoreEl.textContent = gameState.highestScore;
+            
+        }, 500); // 等待胜利界面淡出动画完成
+        
+        // 4. 遮罩淡出，显示游戏结束界面
+        setTimeout(() => {
+            transitionMask.classList.remove('active');
+            transitionMask.classList.add('fade-out');
+            
+            // 动画完成后移除fade-out类
+            setTimeout(() => {
+                transitionMask.classList.remove('fade-out');
+            }, 800);
+            
+        }, 800); // 等待游戏结束界面淡入后开始遮罩淡出
+    }
+
+    // 立即结算
+    function cashoutGame() {
+            // 隐藏胜利界面（无动画，直接隐藏）
+
+        
+        // 使用转场动画显示游戏结束界面
+        transitionToGameOver();
+    }
+
     // 检查游戏结束
     function checkGameOver() {
-        let dangerousCount = 0;
-        let criticalCount = 0;
+        let aboveLineCount = 0;  // 超过警戒线的水果数量
+        let frameThreshold = 80; // 帧数阈值
         
         for (let i = 0; i < gameState.fruits.length; i++) {
             const fruit = gameState.fruits[i];
             const body = fruit.body;
             
-            // 计算速度
-            const speed = Math.sqrt(body.velocity.x * body.velocity.x + body.velocity.y * body.velocity.y);
-            
-            // 位置检测
+            // 计算水果顶部位置
             const fruitTop = body.position.y - body.circleRadius;
             
-            // 临界区域（警戒线上方20px）
-            if (fruitTop < CONFIG.warningLineHeight - 20) {
-                // 速度检测：只有慢速水果才认为是危险的
-                if (speed < 1.0) {
-                    dangerousCount++;
-                    
-                    // 如果水果已经超过警戒线
-                    if (fruitTop < CONFIG.warningLineHeight) {
-                        criticalCount++;
-                    }
+            // 检查是否超过警戒线
+            if (fruitTop < CONFIG.warningLineHeight) {
+                // 增加持续时间
+                if (!fruit.aboveDuration) {
+                    fruit.aboveDuration = 1;
+                } else {
+                    fruit.aboveDuration++;
                 }
+                
+                // 如果这个水果持续时间超过阈值，立即结束游戏
+                if (fruit.aboveDuration >= frameThreshold) {
+                    console.log(`游戏结束！水果 ${fruit.fruitId} 已超过警戒线${frameThreshold}帧`);
+                    endGame();
+                    return;
+                }
+                
+                // 统计超过警戒线的水果数量
+                aboveLineCount++;
+            } else {
+                // 重置持续时间
+                fruit.aboveDuration = 0;
             }
         }
         
-        // 如果有水果超过警戒线且静止，立即结束游戏
-        if (criticalCount > 0) {
-            gameState.dangerCounter++;
-            
-            // 需要连续几帧检测到危险才真正结束游戏（防止误判）
-            if (gameState.dangerCounter > 10) {
-                endGame();
-            }
-        } else {
-            // 重置危险计数器
-            gameState.dangerCounter = Math.max(0, gameState.dangerCounter - 1);
+        // 如果没有任何水果超过警戒线，可以提前返回
+        if (aboveLineCount === 0) {
+            return;
         }
         
-        // 如果危险水果太多，也结束游戏
-        if (dangerousCount >= 5) {
-            endGame();
-        }
+        // 可选：如果有水果超过警戒线但还没到阈值，可以显示警告
+        /*if (aboveLineCount > 0) {
+            // 这里可以添加警告效果，比如闪烁警戒线
+            showWarningEffect();
+        }*/
     }
+
+    
 
 
     // 结束游戏
@@ -521,6 +863,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 停止 Matter.js 引擎
         Runner.stop(runner);
+
+        // 隐藏胜利界面（如果显示着）
+        //const victoryModal = document.getElementById('victory-modal');
+        //if (victoryModal.style.display === 'flex') {
+        //    victoryModal.style.display = 'none';
+        //}
+        // 保存轮子总数
+        gameStats.totalWheelCount += gameState.watermelonCount;
+        localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
         
         // 更新最终分数
         finalScoreEl.textContent = gameState.score;
@@ -622,6 +973,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 如果是最终水果，增加计数
                 if (nextType === CONFIG.fruitTypes.length - 1) {
                     gameState.watermelonCount++;
+                    gameStats.totalWheelCount++;
+                    localStorage.setItem('totalWheelCount', gameStats.totalWheelCount);
+                    updateMenuStats();
+                    // 如果是第一次合成轮子，显示胜利界面
+                    setTimeout(() => {
+                        if (!gameState.hasShownVictory && gameState.watermelonCount === 1) {
+                        gameState.victoryAchieved = true;
+                        gameState.victoryTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+                        showVictoryModal();
+                        gameState.hasShownVictory = true;
+                        }
+                    }, 500); // 1000ms = 1秒延迟
+                    
                 }
                 
                 // 播放合并音效
@@ -785,29 +1149,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
 
-    soundBtn.addEventListener('click', () => {
-        gameState.isSoundOn = !gameState.isSoundOn;
-        gameState.isMusicOn = gameState.isSoundOn; // 背景音乐与音效同步
-        
-        soundBtn.innerHTML = gameState.isSoundOn ? 
-            '<i class="fas fa-volume-up"></i> 音乐' : 
-            '<i class="fas fa-volume-mute"></i> 音乐';
-        
-        // 控制背景音乐
-        if (gameState.isMusicOn) {
-            backgroundMusic.volume = gameState.backgroundMusicVolume;
-            if (!gameState.isPaused && !gameState.isGameOver) {
-                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
-            }
-        } else {
-            backgroundMusic.pause();
-        }
-    });
+
     
     playAgainBtn.addEventListener('click', initGame);
+    continueBtn.addEventListener('click', continueGame);
+    cashoutBtn.addEventListener('click', cashoutGame);
 
     // 初始化游戏
     initGame();
+    
 });
 
 // 动态背景类
@@ -1088,3 +1438,4 @@ class DynamicBackground {
 function initDynamicBackground() {
     window.dynamicBackground = new DynamicBackground();
 }
+
