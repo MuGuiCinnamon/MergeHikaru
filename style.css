@@ -61,7 +61,6 @@
     transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     flex-direction: column;
-    border-right: 3px solid #000000;
 }
 
 .menu-panel.open {
@@ -127,7 +126,7 @@
     margin-bottom: 10px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
-    border-left: 3px solid #4c51bf;
+    border-left: 3px solid #c2c2c2;
     transition: background 0.3s;
 }
 
@@ -137,7 +136,7 @@
 
 .stat-item i {
     font-size: 1.3rem;
-    color: #4c51bf;
+    color: #ffffff;
     width: 30px;
     text-align: center;
 }
@@ -194,7 +193,7 @@
 }
 
 .setting-info i {
-    color: #4c51bf;
+    color: #ffffff;
     width: 20px;
 }
 
@@ -237,7 +236,7 @@
 }
 
 input:checked + .slider {
-    background: linear-gradient(90deg, #4c51bf, #667eea);
+    background: linear-gradient(90deg, #55c9ff, #6d6d6d);
 }
 
 input:checked + .slider:before {
@@ -715,7 +714,7 @@ body {
 .control-key {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #4c51bf, #667eea);
+    background: linear-gradient(135deg, #4b4b4b, #667eea);
     border-radius: 8px;
     display: flex;
     align-items: center;
