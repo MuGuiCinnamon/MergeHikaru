@@ -50,7 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isAboutToEnd:false,
         dangerCounter:0,
         isMusicOn: true,
-        backgroundMusicVolume: 0.5 
+        backgroundMusicVolume: 0.5,
+        victoryAchieved: false,        
+        startTime: Date.now(),         
+        victoryTime: 0,                
+        hasShownVictory: false,        
 
     };
 
@@ -68,6 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverModal = document.getElementById('game-over');
     const fruitReferenceList = document.getElementById('fruit-reference-list');
     const targetFruitEl = document.getElementById('target-fruit');
+    const victoryModal = document.getElementById('victory-modal');
+    const victoryTimeEl = document.getElementById('victory-time');
+    const victoryScoreEl = document.getElementById('victory-score');
+    const continueBtn = document.getElementById('continue-btn');
+    const cashoutBtn = document.getElementById('cashout-btn');
+
 
     // 音效
     const mergeSound = document.getElementById('merge-sound');
@@ -130,7 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
             gameSpeed: 1,
             isGameFocused: false,
             isMusicOn: true,
-            backgroundMusicVolume: 0.5
+            backgroundMusicVolume: 0.5,
+            victoryAchieved: false,
+            startTime: Date.now(),
+            victoryTime: 0,
+            hasShownVictory: false,
+            watermelonCount: 0, // 确保重置计数
         };
 
         
@@ -155,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         updateNextFruit();
         updateHighestScore();
+        victoryModal.style.display = 'none';
         gameOverModal.style.display = 'none';
 
         // 设置背景音乐
@@ -443,6 +459,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 显示胜利界面
+    function showVictoryModal() {
+        if (gameState.isGameOver) return;
+        
+        // 暂停游戏
+        gameState.isPaused = true;
+        Runner.stop(runner);
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        
+        // 更新界面信息
+        victoryTimeEl.textContent = gameState.victoryTime;
+        victoryScoreEl.textContent = gameState.score;
+        
+        // 播放胜利音效
+        if (gameState.isSoundOn) {
+            // 可以添加专门的胜利音效
+            const victorySound = new Audio('assets/audio/victory.mp3');
+            victorySound.volume = 0.5;
+            victorySound.play().catch(e => console.log('胜利音效播放失败'));
+        }
+        
+        // 显示界面
+        victoryModal.style.display = 'flex';
+    }
+
+    // 隐藏胜利界面
+    function hideVictoryModal() {
+        victoryModal.style.display = 'none';
+    }
+
+    // 继续游戏
+    function continueGame() {
+        hideVictoryModal();
+        gameState.isPaused = false;
+        Runner.run(runner, engine);
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
+        
+        // 恢复背景音乐
+        if (gameState.isMusicOn) {
+            backgroundMusic.play().catch(e => console.log('背景音乐恢复失败'));
+        }
+    }
+
+    // 立即结算
+    function cashoutGame() {
+        hideVictoryModal();
+        endGame(); // 使用现有的游戏结束逻辑
+    }
+
     // 检查游戏结束
     function checkGameOver() {
         let aboveLineCount = 0;  // 超过警戒线的水果数量
@@ -485,11 +550,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // 可选：如果有水果超过警戒线但还没到阈值，可以显示警告
-        if (aboveLineCount > 0) {
+        /*if (aboveLineCount > 0) {
             // 这里可以添加警告效果，比如闪烁警戒线
             showWarningEffect();
-        }
+        }*/
     }
+
     
 
 
@@ -499,6 +565,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 停止 Matter.js 引擎
         Runner.stop(runner);
+
+        // 隐藏胜利界面（如果显示着）
+        victoryModal.style.display = 'none';
         
         // 更新最终分数
         finalScoreEl.textContent = gameState.score;
@@ -600,6 +669,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 如果是最终水果，增加计数
                 if (nextType === CONFIG.fruitTypes.length - 1) {
                     gameState.watermelonCount++;
+                    // 如果是第一次合成轮子，显示胜利界面
+                    if (!gameState.hasShownVictory && gameState.watermelonCount === 1) {
+                        gameState.victoryAchieved = true;
+                        gameState.victoryTime = Math.floor((Date.now() - gameState.startTime) / 1000);
+                        showVictoryModal();
+                        gameState.hasShownVictory = true;
+                    }
                 }
                 
                 // 播放合并音效
@@ -783,9 +859,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     playAgainBtn.addEventListener('click', initGame);
+    continueBtn.addEventListener('click', continueGame);
+    cashoutBtn.addEventListener('click', cashoutGame);
 
     // 初始化游戏
     initGame();
+    
 });
 
 // 动态背景类
@@ -1066,3 +1145,4 @@ class DynamicBackground {
 function initDynamicBackground() {
     window.dynamicBackground = new DynamicBackground();
 }
+

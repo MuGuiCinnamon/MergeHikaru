@@ -83,6 +83,48 @@
                 </button>
             </div>
         </div>
+
+        <div id="victory-modal" class="victory-modal">
+            <div class="modal-content">
+                <div class="victory-animation">
+                    <i class="fas fa-crown victory-icon"></i>
+                    <div class="sparkle sparkle-1"></div>
+                    <div class="sparkle sparkle-2"></div>
+                    <div class="sparkle sparkle-3"></div>
+                </div>
+                
+                <h2><i class="fas fa-trophy"></i> 达成成就！</h2>
+                <p class="victory-message">你合成了<span class="highlight">不可名状之物</span>！</p>
+                
+                <div class="achievement-info">
+                    <div class="achievement-icon">
+                        <div class="fruit-sprite fruit-victory fruit-type-9"></div>
+                    </div>
+                    <div class="achievement-text">
+                        <h3>遗子显现</h3>
+                        <p>见证了不可名状之物的降临</p>
+                    </div>
+                </div>
+                
+                <div class="victory-stats">
+                    <p>耗时: <span id="victory-time">0</span> 秒</p>
+                    <p>当前分数: <span id="victory-score">0</span></p>
+                </div>
+                
+                <div class="victory-buttons">
+                    <button id="continue-btn" class="btn btn-continue">
+                        <i class="fas fa-play-circle"></i> 继续合成
+                    </button>
+                    <button id="cashout-btn" class="btn btn-cashout">
+                        <i class="fas fa-coins"></i> 立即结算
+                    </button>
+                </div>
+                
+                <p class="victory-hint">
+                    <i class="fas fa-lightbulb"></i> 提示: 继续合成可获得更高分数！
+                </p>
+            </div>
+        </div>
     </div>
     <footer class="footer">
         <p> · 同人制作 · </p>
