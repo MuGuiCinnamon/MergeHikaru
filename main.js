@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { name: '？？？', radius: 110, color: '#276749', score: 640 }
         ],
         nextFruitTypes: [0, 1, 2, 3],
-        warningLineHeight: 110  // 警戒线高度
+        warningLineHeight: 10  // 警戒线高度
     };
 
     // 游戏状态
@@ -445,51 +445,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 检查游戏结束
     function checkGameOver() {
-        let dangerousCount = 0;
-        let criticalCount = 0;
+        let aboveLineCount = 0;  // 超过警戒线的水果数量
+        let frameThreshold = 80; // 帧数阈值
         
         for (let i = 0; i < gameState.fruits.length; i++) {
             const fruit = gameState.fruits[i];
             const body = fruit.body;
             
-            // 计算速度
-            const speed = Math.sqrt(body.velocity.x * body.velocity.x + body.velocity.y * body.velocity.y);
-            
-            // 位置检测
+            // 计算水果顶部位置
             const fruitTop = body.position.y - body.circleRadius;
             
-            // 临界区域（警戒线上方20px）
-            if (fruitTop < CONFIG.warningLineHeight - 20) {
-                // 速度检测：只有慢速水果才认为是危险的
-                if (speed < 1.0) {
-                    dangerousCount++;
-                    
-                    // 如果水果已经超过警戒线
-                    if (fruitTop < CONFIG.warningLineHeight) {
-                        criticalCount++;
-                    }
+            // 检查是否超过警戒线
+            if (fruitTop < CONFIG.warningLineHeight) {
+                // 增加持续时间
+                if (!fruit.aboveDuration) {
+                    fruit.aboveDuration = 1;
+                } else {
+                    fruit.aboveDuration++;
                 }
+                
+                // 如果这个水果持续时间超过阈值，立即结束游戏
+                if (fruit.aboveDuration >= frameThreshold) {
+                    console.log(`游戏结束！水果 ${fruit.fruitId} 已超过警戒线${frameThreshold}帧`);
+                    endGame();
+                    return;
+                }
+                
+                // 统计超过警戒线的水果数量
+                aboveLineCount++;
+            } else {
+                // 重置持续时间
+                fruit.aboveDuration = 0;
             }
         }
         
-        // 如果有水果超过警戒线且静止，立即结束游戏
-        if (criticalCount > 0) {
-            gameState.dangerCounter++;
-            
-            // 需要连续几帧检测到危险才真正结束游戏（防止误判）
-            if (gameState.dangerCounter > 10) {
-                endGame();
-            }
-        } else {
-            // 重置危险计数器
-            gameState.dangerCounter = Math.max(0, gameState.dangerCounter - 1);
+        // 如果没有任何水果超过警戒线，可以提前返回
+        if (aboveLineCount === 0) {
+            return;
         }
         
-        // 如果危险水果太多，也结束游戏
-        if (dangerousCount >= 5) {
-            endGame();
+        // 可选：如果有水果超过警戒线但还没到阈值，可以显示警告
+        if (aboveLineCount > 0) {
+            // 这里可以添加警告效果，比如闪烁警戒线
+            showWarningEffect();
         }
     }
+    
 
 
     // 结束游戏
