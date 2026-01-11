@@ -670,12 +670,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nextType === CONFIG.fruitTypes.length - 1) {
                     gameState.watermelonCount++;
                     // 如果是第一次合成轮子，显示胜利界面
-                    if (!gameState.hasShownVictory && gameState.watermelonCount === 1) {
+                    setTimeout(() => {
+                        if (!gameState.hasShownVictory && gameState.watermelonCount === 1) {
                         gameState.victoryAchieved = true;
                         gameState.victoryTime = Math.floor((Date.now() - gameState.startTime) / 1000);
                         showVictoryModal();
                         gameState.hasShownVictory = true;
-                    }
+                        }
+                    }, 500); // 1000ms = 1秒延迟
+                    
                 }
                 
                 // 播放合并音效
