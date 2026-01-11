@@ -1,11 +1,8 @@
 /* sprites.css - 水果精灵图样式 */
-:root {
-  --sprite-url: url('/assets/image/css_sprites.png');
-}
 
 /* 通用精灵图类 */
 .fruit-sprite {
-  background-image: var(--sprite-url);
+  background-image: url('assets/image/css_sprites.png');
   background-repeat: no-repeat;
 }
 .fruit-game {
