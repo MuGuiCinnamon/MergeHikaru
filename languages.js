@@ -20,7 +20,30 @@ const LANGUAGES = {
             hint: '提示：按 ESC 键可快速关闭菜单',
             confirmReset: '确定要重置所有游戏统计数据吗？此操作不可撤销。',
             resetComplete: '统计数据已重置！',
-            aboutText: '合成大遗子 v2.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME，漫画本体\n\n祝您游戏愉快！'
+            aboutText: `合成大遗子 v2.0
+
+            【致谢】
+            本作品在制作过程中参考并使用了来自以下平台与个人的素材与支持，在此谨致以诚挚的感谢：
+
+            ■ 素材来源平台
+            • Pixabay（https://pixabay.com/）
+            • DOVA-SYNDROME（https://dova-s.jp/）
+            • 爱给网（https://m.aigei.com/）
+
+            ■ 官方与原作素材
+            • 《光が死んだ夏》官方网站
+            • 《光が死んだ夏》漫画原作相关素材
+
+            ■ 制作
+            • 制作者：木桂 Cinnamon
+            • 日语翻译：村里就俩同龄小孩还都是给子首立真是有了
+
+            ■ 测试与支持
+            • "光死去的夏天" 747065236 QQ 群中的各位朋友，感谢大家的测试、反馈与支持
+
+            最后，衷心感谢《光が死んだ夏》为我们带来了如此动人而美好的故事，也感谢所有为本作品提供帮助与灵感的个人与平台。
+
+            祝您游戏愉快！`
         },
         // 游戏界面相关
         game: {
@@ -79,7 +102,30 @@ const LANGUAGES = {
             hint: 'Hint: Press ESC to close menu',
             confirmReset: 'Are you sure you want to reset all game statistics? This cannot be undone.',
             resetComplete: 'Statistics have been reset!',
-            aboutText: 'Merge Hikaru v2.0\n\nA physics-based merge game\nResources from: pixabay, aigei.com, DOVA-SYNDROME, manga\n\nEnjoy the game!'//问题
+            aboutText: `Merge Hikaru v2.0
+
+                【Acknowledgments】
+                This work was created with the help of resources and support from the following platforms and individuals. Sincere thanks to:
+
+                ■ Resource Platforms
+                • Pixabay (https://pixabay.com/)
+                • DOVA-SYNDROME (https://dova-s.jp/)
+                • Aigei.com (https://m.aigei.com/)
+
+                ■ Official & Original Materials
+                • "The Summer Hikaru Died" Official Website
+                • "The Summer Hikaru Died" manga original materials
+
+                ■ Production
+                • Creator: MuGui Cinnamon
+                • Japanese Translation: 村里就俩同龄小孩还都是给子首立真是有了
+
+                ■ Testing & Support
+                • Friends from QQ Group 747065236, thank you for testing, feedback and support
+
+                Finally, heartfelt thanks to "The Summer Hikaru Died" for bringing us such a touching and wonderful story, and to all individuals and platforms who provided help and inspiration for this work.
+
+                Enjoy the game!`
         },
         game: {
             title: 'Merge Hikaru',//问题
@@ -102,7 +148,7 @@ const LANGUAGES = {
             gameOver: 'Game Over!',
             finalScore: 'Final Score:',
             highestScore: 'Highest Score:',
-            watermelonCount: 'You merged',
+            watermelonCount: 'You have merged',
             watermelonUnit: 'unnameable entities!',
             playAgain: 'Play Again',
             victoryTitle: 'Witnessed the descent of the unnameable entity',
@@ -121,22 +167,45 @@ const LANGUAGES = {
     'ja': {
         menu: {
             title: 'ゲーム情報',
-            totalTime: '総プレイ時間',
-            highestScore: '最高得点',
-            totalWheelCount: '総合体落とし子数',
-            currentScore: '現在の得点',
+            totalTime: 'プレイ時間',
+            highestScore: '最高スコア',
+            totalWheelCount: '合成された落とし子の数',
+            currentScore: '現在スコア',
             settings: 'ゲーム設定',
             gameMusic: 'ゲーム音楽',
             gameSound: '効果音',
             language: '言語',
-            restart: '再開',
-            resetStats: '統計リセット',
+            restart: 'リスタート',
+            resetStats: 'リセット',
             about: 'ゲーム情報',
             version: '合成大落とし子 v2.0',
             hint: 'ヒント：ESCキーでメニューを閉じる',
-            confirmReset: 'すべてのゲーム統計をリセットしますか？この操作は取り消せません。',
-            resetComplete: '統計データをリセットしました！',
-            aboutText: '合成大落とし子 v2.0\n\n物理エンジンベースの合成ゲーム\n素材提供：pixabay、愛給網、DOVA-SYNDROME、漫画\n\nお楽しみください！'
+            confirmReset: 'すべてのゲームデータをリセットしますか？当操作は後戻りできません。',
+            resetComplete: 'ゲームデータをリセットしました！',
+            aboutText: `合成大落とし子 v2.0
+
+            【謝辞】
+            本作品の制作にあたり、以下のプラットフォーム及び個人から素材とサポートを参考・使用させていただきました。心より感謝申し上げます：
+
+            ■ 素材提供プラットフォーム
+            • Pixabay (https://pixabay.com/)
+            • DOVA-SYNDROME (https://dova-s.jp/)
+            • 爱给网 (https://m.aigei.com/)
+
+            ■ 公式及び原作素材
+            • 「光が死んだ夏」公式サイト
+            • 「光が死んだ夏」漫画原作関連素材
+
+            ■ 制作
+            • 制作者：木桂 Cinnamon
+            • 日本語翻訳：村里就俩同龄小孩还都是给子首立真是有了
+
+            ■ テスト及びサポート
+            • QQグループ747065236の皆様、テスト、フィードバック、サポートに感謝いたします
+
+            最後に、「光が死んだ夏」が私たちにこんなに感動的で素晴らしい物語をもたらしてくれたことに心から感謝し、本作品にご協力とインスピレーションをくださったすべての個人とプラットフォームに感謝いたします。
+
+            どうぞお楽しみください！`
         },
         game: {
             title: '合成大落とし子',
@@ -152,27 +221,27 @@ const LANGUAGES = {
             controlArrow: '矢印キー',
             controlDrop: '落下：',
             controlSpace: 'スペースキー',
-            controlDesc1: '落下する落とし子の破片を操作し、適切な位置に配置してください',
-            controlDesc2: '同じ破片が接触すると、より大きな落とし子の破片に合成されます',
-            controlDesc3: '破片が上部のラインまで積み上がると、落とし子が切断されゲーム終了です',
-            reference: '合成表',
+            controlDesc1: '落とし子の欠片を操作し、適切な位置に落下させ',
+            controlDesc2: '同じ破片が接触すると、より大きな落とし子の破片に合成できます',
+            controlDesc3: '積み上がる欠片が上部のラインまで達すると、落とし子が切断されゲーム終了です',
+            reference: '合成リスト',
             gameOver: 'ゲームオーバー!',
-            finalScore: '最終得点:',
-            highestScore: '最高得点:',
+            finalScore: '最終スコア:',
+            highestScore: '最高スコア:',
             watermelonCount: 'あなたは',
             watermelonUnit: 'つの名状しがたい存在を合成しました!',
-            playAgain: 'もう一度遊ぶ',
+            playAgain: 'もう一度',
             victoryTitle: '名状しがたい存在の降臨を目撃しました',
             victoryDesc: 'あなたは???を合成しました',
             victoryTime: '時間:',
-            victoryScore: '現在の得点:',
+            victoryScore: '現在スコア:',
             continueBtn: '続ける',
-            cashoutBtn: '終了',
-            victoryHint: 'ヒント: さらに合成して高得点を目指しましょう！',
-            footer: '· ファン制作 ·',
-            footer2: '素材提供：pixabay、愛給網、DOVA-SYNDROME、漫画'
+            cashoutBtn: '終わりする',
+            victoryHint: 'ヒント: どんどん合成してより高いスコアを目指しましょう！',
+            footer: '· ひかなつＦＡ ·',
+            footer2: 'クレジット：pixabay、爱给网、DOVA-SYNDROME、漫画'
         },
-        fruits: ['剣', '左手', '右足', '左足', '腰', '上半身', '頭部', '「光」', '落とし子', '？？？']
+        fruits: ['胸の骨', 'ヒダリテ', 'ミギアシ', 'ヒダリアシ', 'マタグラ', 'カラダ', 'ナマクビ', 'ヒカル', '落とし子', '？？？']
     }
 };
 

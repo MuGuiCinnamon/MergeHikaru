@@ -304,6 +304,123 @@ input:checked + .slider:before {
     transform: translateY(1px);
 }
 
+/* ========== 关于游戏弹窗样式 ========== */
+.about-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.about-modal-content {
+    background: #000000;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+
+.about-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #4a5568;
+}
+
+.about-header h2 {
+    color: #e2e8f0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.about-close-btn {
+    background: transparent;
+    border: none;
+    color: #cbd5e0;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.about-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.about-body {
+    color: #cbd5e0;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.about-section {
+    margin-bottom: 20px;
+}
+
+.about-section-title {
+    color: #63b3ed;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+}
+
+.about-list {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.about-list li {
+    margin-bottom: 8px;
+}
+
+.about-highlight {
+    color: #68d391;
+    font-weight: 600;
+}
+
+
+/* 滚动条样式 */
+.about-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.about-modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.about-modal-content::-webkit-scrollbar-thumb {
+    background: #6dbbff;
+    border-radius: 4px;
+}
+
+.about-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+
 #menu-restart {
     background: rgba(245, 101, 101, 0.1);
     border-color: #f56565;
@@ -1188,15 +1305,7 @@ body {
     margin-right: auto;
 }
 
-/* 页脚 */
-.footer {
-    text-align: center;
-    padding: 20px;
-    color: #dbe8f5;
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 30px;
-}
+
 
 /* 水果样式 - 简化版 */
 .fruit {

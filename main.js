@@ -75,6 +75,7 @@ const LanguageManager = {
         this.safeUpdateElement('#menu-reset-stats', `<i class="fas fa-trash-alt"></i> ${langData.menu.resetStats}`);
         this.safeUpdateElement('#menu-about', `<i class="fas fa-info-circle"></i> ${langData.menu.about}`);
         
+        
         // 更新页脚
         this.safeUpdateText('.menu-footer p', langData.menu.version);
         this.safeUpdateText('.menu-hint', langData.menu.hint);
@@ -334,6 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuRestartBtn = document.getElementById('menu-restart');
     const menuResetStatsBtn = document.getElementById('menu-reset-stats');
     const menuAboutBtn = document.getElementById('menu-about');
+    const aboutModal = document.getElementById('about-modal');
+    const aboutCloseBtn = document.getElementById('about-close-btn');
+    const aboutContent = document.getElementById('about-content');
 
     // 统计元素
     const totalPlayTimeEl = document.getElementById('total-play-time');
@@ -966,10 +970,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // 关于按钮
     menuAboutBtn.addEventListener('click', function() {
         const langData = LanguageManager.getCurrentLanguageData();
+        showAboutModal(langData.menu.aboutText);
         closeMenu();
-        setTimeout(() => {
-            alert(langData.menu.aboutText);
-        }, 300);
+    });
+
+    // 显示关于弹窗
+    function showAboutModal(content) {
+        // 设置内容
+        aboutContent.textContent = content;
+        
+        // 显示弹窗
+        aboutModal.style.display = 'flex';
+    }
+
+    // 关闭关于弹窗
+    function closeAboutModal() {
+        aboutModal.style.display = 'none';
+    }
+
+    // 关闭按钮事件
+    aboutCloseBtn.addEventListener('click', closeAboutModal);
+
+    // 点击遮罩关闭
+    aboutModal.addEventListener('click', function(e) {
+        if (e.target === aboutModal) {
+            closeAboutModal();
+        }
+    });
+
+    // ESC键关闭
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && aboutModal.style.display === 'flex') {
+            closeAboutModal();
+        }
     });
 
     // 在水果合成时更新轮子总数
@@ -1000,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 播放胜利音效
         if (gameState.isSoundOn) {
             // 可以添加专门的胜利音效
-            const victorySound = new Audio('assets/audio/victory.mp3');
+
             victorySound.volume = 0.5;
             victorySound.play().catch(e => console.log('胜利音效播放失败'));
         }
