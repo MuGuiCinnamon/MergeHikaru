@@ -242,6 +242,35 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(24px);
 }
+/* 语言选择器样式 */
+.language-select {
+    padding: 6px 12px;
+    background: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    color: #cbd5e0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    min-width: 100px;
+    transition: all 0.3s;
+}
+
+.language-select:hover {
+    border-color: #4c51bf;
+    background: #374151;
+}
+
+.language-select:focus {
+    border-color: #4c51bf;
+    box-shadow: 0 0 0 2px rgba(76, 81, 191, 0.2);
+}
+
+.language-select option {
+    background: #1a202c;
+    color: #cbd5e0;
+    padding: 10px;
+}
 
 /* 操作按钮 */
 .menu-actions {
@@ -273,6 +302,123 @@ input:checked + .slider:before {
 
 .btn-menu-action:active {
     transform: translateY(1px);
+}
+
+/* ========== 关于游戏弹窗样式 ========== */
+.about-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.about-modal-content {
+    background: #000000;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+}
+
+.about-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #4a5568;
+}
+
+.about-header h2 {
+    color: #e2e8f0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.about-close-btn {
+    background: transparent;
+    border: none;
+    color: #cbd5e0;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.about-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.about-body {
+    color: #cbd5e0;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.about-section {
+    margin-bottom: 20px;
+}
+
+.about-section-title {
+    color: #63b3ed;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+}
+
+.about-list {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.about-list li {
+    margin-bottom: 8px;
+}
+
+.about-highlight {
+    color: #68d391;
+    font-weight: 600;
+}
+
+
+/* 滚动条样式 */
+.about-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.about-modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.about-modal-content::-webkit-scrollbar-thumb {
+    background: #6dbbff;
+    border-radius: 4px;
+}
+
+.about-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
 }
 
 #menu-restart {
@@ -352,11 +498,7 @@ kbd {
         right: 15px;
     }
     
-    .menu-toggle-btn {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-        min-width: 70px;
-    }
+
     
     .menu-panel {
         width: 280px;
@@ -382,20 +524,22 @@ kbd {
         left: -260px;
     }
     
-    .menu-toggle-btn  {
-        display: none; /* 在小屏幕上只显示图标 */
+    .language-select {
+        min-width: 80px;
+        padding: 5px 8px;
+        font-size: 0.85rem;
     }
+
+
     
     .menu-toggle-btn {
-        min-width: 50px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 10px 10px;
     }
     
     .menu-toggle-btn i {
-        font-size: 1.4rem;
+        font-size: 1rem;
     }
 }
 /* ========== 动态背景样式 ========== */
@@ -1161,15 +1305,7 @@ body {
     margin-right: auto;
 }
 
-/* 页脚 */
-.footer {
-    text-align: center;
-    padding: 20px;
-    color: #dbe8f5;
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 30px;
-}
+
 
 /* 水果样式 - 简化版 */
 .fruit {
