@@ -89,7 +89,7 @@ const LANGUAGES = {
             title: 'Game Info',
             totalTime: 'Total Play Time',
             highestScore: 'Highest Score',
-            totalWheelCount: 'Total “illegiti-mates” Count',//问题
+            totalWheelCount: 'Total “illegiti-mates”',//问题
             currentScore: 'Current Score',
             settings: 'Game Settings',
             gameMusic: 'Game Music',
@@ -98,11 +98,11 @@ const LANGUAGES = {
             restart: 'Restart Game',
             resetStats: 'Reset Statistics',
             about: 'About Game',
-            version: 'Merge Hikaru v2.0',//问题
+            version: 'Merge Hikaru: The Illegiti-mate v2.0',//问题
             hint: 'Hint: Press ESC to close menu',
             confirmReset: 'Are you sure you want to reset all game statistics? This cannot be undone.',
             resetComplete: 'Statistics have been reset!',
-            aboutText: `Merge Hikaru v2.0
+            aboutText: `Merge Hikaru: The Illegiti-mate v2.0
 
                 【Acknowledgments】
                 This work was created with the help of resources and support from the following platforms and individuals. Sincere thanks to:
@@ -118,7 +118,7 @@ const LANGUAGES = {
 
                 ■ Production
                 • Creator: MuGui Cinnamon
-                • Japanese Translation: 村里就俩同龄小孩还都是给子首立真是有了
+                • Japanese Translation: “The village only had two high school kids their age to begin with, and both of them were basically gay. This place was already done for”
 
                 ■ Testing & Support
                 • Friends from QQ Group 747065236, thank you for testing, feedback and support
@@ -141,9 +141,9 @@ const LANGUAGES = {
             controlArrow: 'Arrow Keys',
             controlDrop: 'Drop:',
             controlSpace: 'Spacebar',
-            controlDesc1: 'Control the falling “illegiti-mates” fragments and place them in suitable positions', //问题
-            controlDesc2: 'When two identical fragments touch, they merge into a larger “illegiti-mates” fragment',//问题
-            controlDesc3: 'If fragments stack up to the top line, the “illegiti-mates” is cut and the game ends',
+            controlDesc1: 'Control the falling “illegiti-mates” pieces and place them in suitable positions', //问题
+            controlDesc2: 'When two identical pieces touch, they merge into a larger “illegiti-mates” fragment',//问题
+            controlDesc3: 'If pieces stack up to the top line, the “illegiti-mates” is cut and the game ends',
             reference: 'Merge Chart',
             gameOver: 'Game Over!',
             finalScore: 'Final Score:',
@@ -151,7 +151,7 @@ const LANGUAGES = {
             watermelonCount: 'You have merged',
             watermelonUnit: 'unnameable entities!',
             playAgain: 'Play Again',
-            victoryTitle: 'Witnessed the descent of the unnameable entity',
+            victoryTitle: 'Witnessed the Descent of the Unnameable',
             victoryDesc: 'You merged "???"',
             victoryTime: 'Time:',
             victoryScore: 'Current Score:',
@@ -166,79 +166,72 @@ const LANGUAGES = {
     
     'ja': {
         menu: {
-            title: 'ゲーム情報',
+            title: 'メニュー',
             totalTime: 'プレイ時間',
-            highestScore: '最高スコア',
-            totalWheelCount: '合成された落とし子の数',
+            highestScore: 'ハイスコア',
+            totalWheelCount: '落とし子の数',
             currentScore: '現在スコア',
-            settings: 'ゲーム設定',
-            gameMusic: 'ゲーム音楽',
-            gameSound: '効果音',
+            settings: 'オプション',
+            gameMusic: '音楽・BGM',
+            gameSound: '効果音・SE',
             language: '言語',
-            restart: 'リスタート',
+            restart: 'リトライ',
             resetStats: 'リセット',
-            about: 'ゲーム情報',
-            version: '合成大落とし子 v2.0',
-            hint: 'ヒント：ESCキーでメニューを閉じる',
-            confirmReset: 'すべてのゲームデータをリセットしますか？当操作は後戻りできません。',
+            about: '『合成大遺子』について',
+            version: '～合成大遺子～ヒカルをつなげてシンカさせよう v2.0',
+            hint: '役に立つかも：ESCキーでメニューを閉じることができます',
+            confirmReset: 'すべてのゲームデータをリセットしますか？この操作は後戻りできません。',
             resetComplete: 'ゲームデータをリセットしました！',
             aboutText: `合成大落とし子 v2.0
-
-            【謝辞】
-            本作品の制作にあたり、以下のプラットフォーム及び個人から素材とサポートを参考・使用させていただきました。心より感謝申し上げます：
-
-            ■ 素材提供プラットフォーム
+            【制作・スペシャルサンクス】
+            当ゲームの制作にあたり、下記の団体及び個人からの素材とサポートを参考・使用させていただきました。心より感謝申し上げます。
+            ■フリー素材サイト
             • Pixabay (https://pixabay.com/)
             • DOVA-SYNDROME (https://dova-s.jp/)
             • 爱给网 (https://m.aigei.com/)
-
             ■ 公式及び原作素材
             • 「光が死んだ夏」公式サイト
             • 「光が死んだ夏」漫画原作関連素材
-
             ■ 制作
             • 制作者：木桂 Cinnamon
-            • 日本語翻訳：村里就俩同龄小孩还都是给子首立真是有了
-
-            ■ テスト及びサポート
+            • 日本語翻訳：村で年の近い高校児たった二名なのにだれもかれもホモ寄りなんてクビタチはもうおしまいや
+            ■ テスト・サポート
             • QQグループ747065236の皆様、テスト、フィードバック、サポートに感謝いたします
-
-            最後に、「光が死んだ夏」が私たちにこんなに感動的で素晴らしい物語をもたらしてくれたことに心から感謝し、本作品にご協力とインスピレーションをくださったすべての個人とプラットフォームに感謝いたします。
-
+            最後に、感動あふれる素晴らしい原作にもお礼の一言を。ご協力、ご参考になってくださった個人や団体の方々に、心から感謝を申し上げます。
             どうぞお楽しみください！`
         },
         game: {
-            title: '合成大落とし子',
+            title: '～合成大遺子～ヒカルをつなげてシンカさせよう',
             score: 'スコア:',
-            target: '目標:',
-            next: '次:',
-            restart: 'リスタート',
+            target: '目指せ:',
+            next: 'ネクスト',
+            restart: 'リトライ',
             pause: '一時停止',
             continue: '続ける',
-            instructions: 'ゲーム説明',
-            controlMove: '移動：',
+            instructions: '遊ぶ方',
+            controlMove: 'カーソルの動かす方：',
             controlMouse: 'マウス',
             controlArrow: '矢印キー',
             controlDrop: '落下：',
             controlSpace: 'スペースキー',
-            controlDesc1: '落とし子の欠片を操作し、適切な位置に落下させ',
-            controlDesc2: '同じ破片が接触すると、より大きな落とし子の破片に合成できます',
-            controlDesc3: '積み上がる欠片が上部のラインまで達すると、落とし子が切断されゲーム終了です',
-            reference: '合成リスト',
+            controlDesc1: 'ヒカルのカケラを移動し、目当ての所に落下させることができます',
+            controlDesc2: '同じカケラ同士がぶつけると、より大きなヒカルのカケラに変化していく',
+            controlDesc3: '積み上げたカケラが上部のワイヤーまで触れると、ヒカルが分断されゲーム終了です',
+            reference: 'シンカリスト',
             gameOver: 'ゲームオーバー!',
-            finalScore: '最終スコア:',
-            highestScore: '最高スコア:',
+            finalScore: '獲得スコア:',
+            highestScore: 'ハイスコア:',
             watermelonCount: 'あなたは',
-            watermelonUnit: 'つの名状しがたい存在を合成しました!',
-            playAgain: 'もう一度',
-            victoryTitle: '名状しがたい存在の降臨を目撃しました',
-            victoryDesc: 'あなたは???を合成しました',
-            victoryTime: '時間:',
+            watermelonUnit: 'つの名状しがたい存在にシンカさせました!',
+            playAgain: 'もう一度やってみる',
+            victoryTitle: '降りてきた名状しがたい存在を目撃しました',
+            victoryDesc: '???にシンカさせました',
+            victoryTime: 'プレイ時間:',
             victoryScore: '現在スコア:',
             continueBtn: '続ける',
             cashoutBtn: '終わりする',
-            victoryHint: 'ヒント: どんどん合成してより高いスコアを目指しましょう！',
-            footer: '· ひかなつＦＡ ·',
+            victoryHint: '役に立つかも: どんどんぶつけ合えハイスコアを目指しましょう！',
+            footer: '·  ひかなつＦＡ  ·',
             footer2: 'クレジット：pixabay、爱给网、DOVA-SYNDROME、漫画'
         },
         fruits: ['胸の骨', 'ヒダリテ', 'ミギアシ', 'ヒダリアシ', 'マタグラ', 'カラダ', 'ナマクビ', 'ヒカル', '落とし子', '？？？']
