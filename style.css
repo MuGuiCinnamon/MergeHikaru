@@ -242,6 +242,35 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(24px);
 }
+/* 语言选择器样式 */
+.language-select {
+    padding: 6px 12px;
+    background: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    color: #cbd5e0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    min-width: 100px;
+    transition: all 0.3s;
+}
+
+.language-select:hover {
+    border-color: #4c51bf;
+    background: #374151;
+}
+
+.language-select:focus {
+    border-color: #4c51bf;
+    box-shadow: 0 0 0 2px rgba(76, 81, 191, 0.2);
+}
+
+.language-select option {
+    background: #1a202c;
+    color: #cbd5e0;
+    padding: 10px;
+}
 
 /* 操作按钮 */
 .menu-actions {
@@ -378,6 +407,12 @@ kbd {
         left: -260px;
     }
     
+    .language-select {
+        min-width: 80px;
+        padding: 5px 8px;
+        font-size: 0.85rem;
+    }
+
 
     
     .menu-toggle-btn {

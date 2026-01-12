@@ -1,3 +1,248 @@
+//语言管理模块
+//语言管理模块
+const LanguageManager = {
+    // 当前语言
+    currentLang: 'zh-CN', // 先设置默认值
+    
+    // 获取当前语言数据
+    getCurrentLanguageData() {
+        return LANGUAGES[this.currentLang] || LANGUAGES['zh-CN'];
+    },
+    
+    // 获取指定语言数据
+    getLanguageData(langCode) {
+        return LANGUAGES[langCode] || LANGUAGES['zh-CN'];
+    },
+    
+    // 切换语言
+    setLanguage(langCode) {
+        if (LANGUAGES[langCode]) {
+            console.log('切换语言到:', langCode);
+            this.currentLang = langCode;
+            localStorage.setItem('gameLanguage', langCode);
+            this.applyLanguage(langCode);
+            return true;
+        }
+        console.warn('不支持的语言:', langCode);
+        return false;
+    },
+    
+    // 获取当前语言代码
+    getCurrentLanguage() {
+        return this.currentLang;
+    },
+    
+    // 应用语言到界面
+    applyLanguage(langCode) {
+        console.log('正在应用语言:', langCode);
+        const langData = this.getLanguageData(langCode);
+        if (!langData) {
+            console.error('找不到语言数据:', langCode);
+            return;
+        }
+        
+        // 更新语言选择器
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.value = langCode;
+        }
+        
+        // 更新菜单文本
+        this.safeUpdateElement('.menu-header h3', `<i class="fas fa-gamepad"></i> ${langData.menu.title}`);
+        
+        // 更新菜单统计标签
+        const statItems = document.querySelectorAll('.stat-item');
+        if (statItems.length >= 4) {
+            statItems[0].querySelector('.stat-label').textContent = langData.menu.totalTime;
+            statItems[1].querySelector('.stat-label').textContent = langData.menu.highestScore;
+            statItems[2].querySelector('.stat-label').textContent = langData.menu.totalWheelCount;
+            statItems[3].querySelector('.stat-label').textContent = langData.menu.currentScore;
+        }
+        
+        // 更新设置标题
+        this.safeUpdateElement('.menu-settings h4', `<i class="fas fa-sliders-h"></i> ${langData.menu.settings}`);
+        
+        // 更新设置项文本
+        const settings = document.querySelectorAll('.setting-info span');
+        if (settings.length >= 3) {
+            settings[0].textContent = langData.menu.gameMusic;
+            settings[1].textContent = langData.menu.gameSound;
+            settings[2].textContent = langData.menu.language;
+        }
+        
+        // 更新操作按钮
+        this.safeUpdateElement('#menu-restart', `<i class="fas fa-redo"></i> ${langData.menu.restart}`);
+        this.safeUpdateElement('#menu-reset-stats', `<i class="fas fa-trash-alt"></i> ${langData.menu.resetStats}`);
+        this.safeUpdateElement('#menu-about', `<i class="fas fa-info-circle"></i> ${langData.menu.about}`);
+        
+        // 更新页脚
+        this.safeUpdateText('.menu-footer p', langData.menu.version);
+        this.safeUpdateText('.menu-hint', langData.menu.hint);
+        
+        // 更新游戏标题
+        document.title = langData.game.title;
+        
+        // 更新游戏界面文本
+        this.safeUpdateElement('h1', `<i class="fas fa-gamepad"></i> ${langData.game.title}`);
+        
+        // 更新游戏主界面的文本
+        this.updateGameInterface(langData.game);
+        
+        // 更新游戏说明
+        this.safeUpdateElement('.instructions h2', `<i class="fas fa-info-circle"></i> ${langData.game.instructions}`);
+        const instructionItems = document.querySelectorAll('.instructions li');
+        if (instructionItems.length >= 4) {
+            instructionItems[0].innerHTML = `${langData.game.controlMove}
+                <i class="fa-solid fa-computer-mouse"></i>，
+                <i class="fa-solid fa-up-long"></i>
+                <i class="fa-solid fa-down-long"></i>
+                <i class="fa-solid fa-left-long"></i>
+                <i class="fa-solid fa-right-long"></i>`;
+            instructionItems[1].textContent = langData.game.controlDesc1;
+            instructionItems[2].textContent = langData.game.controlDesc2;
+            instructionItems[3].textContent = langData.game.controlDesc3;
+        }
+        
+        // 更新合成表标题
+        this.safeUpdateElement('.fruit-reference h3', `<i class="fa-solid fa-eye"></i> ${langData.game.reference}`);
+        
+        // 更新水果名称
+        this.updateFruitNames(langCode);
+        
+        // 更新游戏结束界面
+        this.safeUpdateElement('.game-over-modal .modal-content h2', `<i class="fas fa-trophy"></i> ${langData.game.gameOver}`);
+        
+        // 更新页脚
+        const footerParagraphs = document.querySelectorAll('.footer p');
+        if (footerParagraphs.length >= 2) {
+            footerParagraphs[0].textContent = langData.game.footer;
+            footerParagraphs[1].textContent = langData.game.footer2;
+        }
+        
+        // 更新水果配置
+        if (typeof CONFIG !== 'undefined' && CONFIG.fruitTypes) {
+            CONFIG.fruitTypes.forEach((fruit, index) => {
+                if (langData.fruits && langData.fruits[index]) {
+                    fruit.name = langData.fruits[index];
+                }
+            });
+        }
+        
+        // 重新生成水果参考表
+        if (typeof generateFruitReference === 'function') {
+            generateFruitReference();
+        }
+        
+        // 更新目标水果显示
+        if (typeof targetFruitEl !== 'undefined' && targetFruitEl) {
+            targetFruitEl.textContent = CONFIG.fruitTypes[CONFIG.fruitTypes.length - 1].name;
+        }
+        
+        console.log('语言应用完成:', langCode);
+    },
+    
+    // 更新游戏界面的辅助方法
+    updateGameInterface(gameTexts) {
+        // 更新分数标签
+        this.safeUpdateText('.score-label', gameTexts.score);
+        this.safeUpdateText('.level-label', gameTexts.target);
+        this.safeUpdateText('.next-label', gameTexts.next);
+        
+        // 更新按钮文本
+        this.safeUpdateElement('#restart-btn', `<i class="fas fa-redo"></i> ${gameTexts.restart}`);
+        
+        // 更新暂停按钮
+        const pauseBtn = document.getElementById('pause-btn');
+        if (pauseBtn) {
+            if (typeof gameState !== 'undefined' && gameState.isPaused) {
+                pauseBtn.innerHTML = `<i class="fas fa-play"></i> ${gameTexts.continue}`;
+            } else {
+                pauseBtn.innerHTML = `<i class="fas fa-pause"></i> ${gameTexts.pause}`;
+            }
+        }
+    },
+    
+    // 安全更新元素（检查元素是否存在）
+    safeUpdateElement(selector, html) {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.innerHTML = html;
+        }
+    },
+    
+    // 安全更新文本
+    safeUpdateText(selector, text) {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.textContent = text;
+        }
+    },
+    
+    // 更新水果名称
+    updateFruitNames(langCode) {
+        const langData = this.getLanguageData(langCode);
+        const fruitItems = document.querySelectorAll('.fruit-ref-item');
+        
+        fruitItems.forEach((item, index) => {
+            const nameEl = item.querySelector('.fruit-ref-name');
+            if (nameEl && langData.fruits && langData.fruits[index]) {
+                nameEl.textContent = langData.fruits[index];
+            }
+        });
+    },
+    
+    // 初始化语言
+    init() {
+        console.log('初始化语言管理器...');
+        
+        // 从localStorage加载语言设置
+        const savedLang = localStorage.getItem('gameLanguage');
+        if (savedLang && LANGUAGES[savedLang]) {
+            this.currentLang = savedLang;
+        } else {
+            this.currentLang = 'zh-CN';
+        }
+        console.log('当前语言:', this.currentLang);
+        
+        // 等待DOM完全加载
+        const initAfterDOM = () => {
+            console.log('DOM已加载，设置语言选择器...');
+            
+            // 设置下拉框
+            const languageSelect = document.getElementById('language-select');
+            if (languageSelect) {
+                console.log('找到语言选择器，设置值为:', this.currentLang);
+                languageSelect.value = this.currentLang;
+                
+                // 移除现有的事件监听器（避免重复）
+                const newLanguageSelect = languageSelect.cloneNode(true);
+                languageSelect.parentNode.replaceChild(newLanguageSelect, languageSelect);
+                
+                // 添加新的监听器
+                newLanguageSelect.addEventListener('change', (e) => {
+                    const langCode = e.target.value;
+                    console.log('语言选择器改变到:', langCode);
+                    this.setLanguage(langCode);
+                });
+                
+                // 应用初始语言
+                setTimeout(() => {
+                    console.log('应用初始语言:', this.currentLang);
+                    this.applyLanguage(this.currentLang);
+                }, 100);
+            } else {
+                console.warn('找不到语言选择器');
+            }
+        };
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAfterDOM);
+        } else {
+            initAfterDOM();
+        }
+    }
+};
+
 // 游戏主逻辑
 document.addEventListener('DOMContentLoaded', () => {
     // 初始化动态背景
@@ -77,14 +322,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const victoryScoreEl = document.getElementById('victory-score');
     const continueBtn = document.getElementById('continue-btn');
     const cashoutBtn = document.getElementById('cashout-btn');
-    // DOM元素
+    // 菜单
     const menuToggleBtn = document.getElementById('menu-toggle');
     const menuCloseBtn = document.getElementById('menu-close');
     const menuPanel = document.getElementById('menu-panel');
     const menuOverlay = document.getElementById('menu-overlay');
     const musicToggle = document.getElementById('music-toggle');
     const soundToggle = document.getElementById('sound-toggle');
-    const effectsToggle = document.getElementById('effects-toggle');
+    const languageSelect = document.getElementById('language-select');
+    //const effectsToggle = document.getElementById('effects-toggle');
     const menuRestartBtn = document.getElementById('menu-restart');
     const menuResetStatsBtn = document.getElementById('menu-reset-stats');
     const menuAboutBtn = document.getElementById('menu-about');
@@ -102,6 +348,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropSound = document.getElementById('drop-sound');
     const gameOverSound = document.getElementById('game-over-sound');
     const backgroundMusic = document.getElementById('background-music');
+
+    // 在DOM完全加载后初始化语言管理器
+    setTimeout(() => {
+        console.log('初始化语言管理器');
+        if (typeof LanguageManager !== 'undefined') {
+            LanguageManager.init();
+        }
+        
+        // 初始化游戏
+        initGame();
+    }, 500);
 
     // ========== Matter.js 初始化 ==========
     const engine = Engine.create();
@@ -183,6 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 //console.log(`✅ 清理定时器: 水果类型=${fruit.type}, ID=${fruit.fruitId}`);
             }
         });
+        
 
         // 更新UI
         updateScore();
@@ -192,10 +450,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverModal.style.display = 'none';
         // 初始化菜单
         initMenu();
-
-        // 设置背景音乐
-        
-        
 
         // 生成水果参考表
         generateFruitReference();
@@ -510,7 +764,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 设置音乐开关初始状态
         musicToggle.checked = gameState.isMusicOn;
         soundToggle.checked = gameState.isSoundOn;
-        effectsToggle.checked = true; // 默认开启特效
+        languageSelect.value = gameState.currentLanguage;
+        //effectsToggle.checked = true; // 默认开启特效
         
         // 每秒钟更新一次游戏时长
         setInterval(() => {
@@ -540,6 +795,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 更新当前分数
         menuCurrentScoreEl.textContent = gameState.score;
     }
+    
+
 
     // 打开菜单
     function openMenu() {
@@ -665,13 +922,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('isSoundOn', this.checked);
     });
 
+
     // 特效开关
-    effectsToggle.addEventListener('change', function() {
+    /*effectsToggle.addEventListener('change', function() {
         const enabled = this.checked;
         // 这里可以添加特效开关逻辑
         console.log('特效开关:', enabled ? '开启' : '关闭');
         localStorage.setItem('effectsEnabled', enabled);
-    });
+    });*/
 
     // 重新开始游戏
     menuRestartBtn.addEventListener('click', function() {
@@ -683,7 +941,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 重置统计数据
     menuResetStatsBtn.addEventListener('click', function() {
-        if (confirm('确定要重置所有游戏统计数据吗？此操作不可撤销。')) {
+        const langData = LanguageManager.getCurrentLanguageData();
+        if (confirm(langData.menu.confirmReset)) {
             // 重置本地存储
             localStorage.removeItem('totalPlayTime');
             localStorage.removeItem('totalWheelCount');
@@ -699,16 +958,17 @@ document.addEventListener('DOMContentLoaded', () => {
             updateHighestScore();
             
             // 显示确认消息
-            alert('统计数据已重置！');
+            alert(langData.menu.resetComplete);
             closeMenu();
         }
     });
 
     // 关于按钮
     menuAboutBtn.addEventListener('click', function() {
+        const langData = LanguageManager.getCurrentLanguageData();
         closeMenu();
         setTimeout(() => {
-            alert('合成大遗子 v2.0\n\n一个基于物理引擎的合成游戏\n素材来源：pixabay，爱给网，DOVA-SYNDROME，漫画本体\n\n祝您游戏愉快！');
+            alert(langData.menu.aboutText);
         }, 300);
     });
 
