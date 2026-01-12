@@ -66,7 +66,7 @@ const LANGUAGES = {
             title: 'Game Info',
             totalTime: 'Total Play Time',
             highestScore: 'Highest Score',
-            totalWheelCount: 'Total Yizi Count',
+            totalWheelCount: 'Total “illegiti-mates” Count',//问题
             currentScore: 'Current Score',
             settings: 'Game Settings',
             gameMusic: 'Game Music',
@@ -75,14 +75,14 @@ const LANGUAGES = {
             restart: 'Restart Game',
             resetStats: 'Reset Statistics',
             about: 'About Game',
-            version: 'Merge Yizi v2.0',
+            version: 'Merge Hikaru v2.0',//问题
             hint: 'Hint: Press ESC to close menu',
             confirmReset: 'Are you sure you want to reset all game statistics? This cannot be undone.',
             resetComplete: 'Statistics have been reset!',
-            aboutText: 'Merge Yizi v2.0\n\nA physics-based merge game\nResources from: pixabay, aigei.com, DOVA-SYNDROME, manga\n\nEnjoy the game!'
+            aboutText: 'Merge Hikaru v2.0\n\nA physics-based merge game\nResources from: pixabay, aigei.com, DOVA-SYNDROME, manga\n\nEnjoy the game!'//问题
         },
         game: {
-            title: 'Merge Yizi',
+            title: 'Merge Hikaru',//问题
             score: 'Score:',
             target: 'Target:',
             next: 'Next:',
@@ -95,9 +95,9 @@ const LANGUAGES = {
             controlArrow: 'Arrow Keys',
             controlDrop: 'Drop:',
             controlSpace: 'Spacebar',
-            controlDesc1: 'Control the falling Yizi fragments and place them in suitable positions',
-            controlDesc2: 'When two identical fragments touch, they merge into a larger Yizi fragment',
-            controlDesc3: 'If fragments stack up to the top line, the Yizi is cut and the game ends',
+            controlDesc1: 'Control the falling “illegiti-mates” fragments and place them in suitable positions', //问题
+            controlDesc2: 'When two identical fragments touch, they merge into a larger “illegiti-mates” fragment',//问题
+            controlDesc3: 'If fragments stack up to the top line, the “illegiti-mates” is cut and the game ends',
             reference: 'Merge Chart',
             gameOver: 'Game Over!',
             finalScore: 'Final Score:',
@@ -115,7 +115,7 @@ const LANGUAGES = {
             footer: '· Fan-Made ·',
             footer2: 'Resources from: pixabay, aigei.com, DOVA-SYNDROME, manga'
         },
-        fruits: ['Sword', 'Left Hand', 'Right Leg', 'Left Leg', 'Pelvis', 'Upper Body', 'Head', '"Light"', 'Yizi', '???']
+        fruits: ['Xiphoid Process', 'Left Hand', 'Right Leg', 'Left Leg', 'Hip', 'Upper Body', 'Head', '"Hikaru"', '“illegiti-mates”', '???']
     },
     
     'ja': {
@@ -123,7 +123,7 @@ const LANGUAGES = {
             title: 'ゲーム情報',
             totalTime: '総プレイ時間',
             highestScore: '最高得点',
-            totalWheelCount: '総合体遺子数',
+            totalWheelCount: '総合体落とし子数',
             currentScore: '現在の得点',
             settings: 'ゲーム設定',
             gameMusic: 'ゲーム音楽',
@@ -132,14 +132,14 @@ const LANGUAGES = {
             restart: '再開',
             resetStats: '統計リセット',
             about: 'ゲーム情報',
-            version: '合成大遺子 v2.0',
+            version: '合成大落とし子 v2.0',
             hint: 'ヒント：ESCキーでメニューを閉じる',
             confirmReset: 'すべてのゲーム統計をリセットしますか？この操作は取り消せません。',
             resetComplete: '統計データをリセットしました！',
-            aboutText: '合成大遺子 v2.0\n\n物理エンジンベースの合成ゲーム\n素材提供：pixabay、愛給網、DOVA-SYNDROME、漫画\n\nお楽しみください！'
+            aboutText: '合成大落とし子 v2.0\n\n物理エンジンベースの合成ゲーム\n素材提供：pixabay、愛給網、DOVA-SYNDROME、漫画\n\nお楽しみください！'
         },
         game: {
-            title: '合成大遺子',
+            title: '合成大落とし子',
             score: 'スコア:',
             target: '目標:',
             next: '次:',
@@ -152,9 +152,9 @@ const LANGUAGES = {
             controlArrow: '矢印キー',
             controlDrop: '落下：',
             controlSpace: 'スペースキー',
-            controlDesc1: '落下する遺子の破片を操作し、適切な位置に配置してください',
-            controlDesc2: '同じ破片が接触すると、より大きな遺子の破片に合成されます',
-            controlDesc3: '破片が上部のラインまで積み上がると、遺子が切断されゲーム終了です',
+            controlDesc1: '落下する落とし子の破片を操作し、適切な位置に配置してください',
+            controlDesc2: '同じ破片が接触すると、より大きな落とし子の破片に合成されます',
+            controlDesc3: '破片が上部のラインまで積み上がると、落とし子が切断されゲーム終了です',
             reference: '合成表',
             gameOver: 'ゲームオーバー!',
             finalScore: '最終得点:',
@@ -172,7 +172,7 @@ const LANGUAGES = {
             footer: '· ファン制作 ·',
             footer2: '素材提供：pixabay、愛給網、DOVA-SYNDROME、漫画'
         },
-        fruits: ['剣', '左手', '右足', '左足', '腰', '上半身', '頭部', '「光」', '遺子', '？？？']
+        fruits: ['剣', '左手', '右足', '左足', '腰', '上半身', '頭部', '「光」', '落とし子', '？？？']
     }
 };
 
