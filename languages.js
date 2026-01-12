@@ -152,7 +152,7 @@ const LANGUAGES = {
             watermelonUnit: 'unnameable entities!',
             playAgain: 'Play Again',
             victoryTitle: 'Witnessed the descent of the unnameable entity',
-            victoryDesc: 'You merged ???',
+            victoryDesc: 'You merged "???"',
             victoryTime: 'Time:',
             victoryScore: 'Current Score:',
             continueBtn: 'Continue',

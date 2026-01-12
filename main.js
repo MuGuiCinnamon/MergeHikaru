@@ -138,6 +138,49 @@ const LanguageManager = {
         if (typeof targetFruitEl !== 'undefined' && targetFruitEl) {
             targetFruitEl.textContent = CONFIG.fruitTypes[CONFIG.fruitTypes.length - 1].name;
         }
+        // 在 applyLanguage 方法中添加以下代码：
+
+        // 更新游戏结束界面
+        this.safeUpdateElement('.game-over-modal .modal-content h2', `<i class="fas fa-trophy"></i> ${langData.game.gameOver}`);
+        this.safeUpdateText('.final-score', `${langData.game.finalScore} `);
+        this.safeUpdateText('.highest-score', `${langData.game.highestScore} `);
+
+        // 更新 watermelon 计数文本
+        const watermelonText = document.querySelector('.fruit-stats p');
+        if (watermelonText) {
+            watermelonText.innerHTML = `${langData.game.watermelonCount} <span id="watermelon-count">0</span> ${langData.game.watermelonUnit}`;
+        }
+
+        // 更新再玩一次按钮
+        this.safeUpdateElement('#play-again-btn', `<i class="fas fa-play"></i> ${langData.game.playAgain}`);
+
+        // 更新胜利界面
+        const victoryTitle = document.querySelector('.victory-modal .highlight');
+        if (victoryTitle) {
+            victoryTitle.textContent = langData.game.victoryTitle;
+        }
+
+        const victoryDesc = document.querySelector('.achievement-text p');
+        if (victoryDesc) {
+            victoryDesc.innerHTML = `${langData.game.victoryDesc}`;
+        }
+
+        // 更新胜利界面统计文本
+        const victoryStats = document.querySelectorAll('.victory-stats p');
+        if (victoryStats.length >= 2) {
+            victoryStats[0].innerHTML = `${langData.game.victoryTime} <span id="victory-time">0</span> 秒`;
+            victoryStats[1].innerHTML = `${langData.game.victoryScore} <span id="victory-score">0</span>`;
+        }
+
+        // 更新胜利界面按钮
+        this.safeUpdateElement('#continue-btn', `<i class="fas fa-play-circle"></i> ${langData.game.continueBtn}`);
+        this.safeUpdateElement('#cashout-btn', `<i class="fas fa-coins"></i> ${langData.game.cashoutBtn}`);
+
+        // 更新胜利界面提示
+        this.safeUpdateElement('.victory-hint', `<i class="fas fa-lightbulb"></i> ${langData.game.victoryHint}`);
+
+        // 更新关于游戏标题
+        this.safeUpdateElement('.about-header h2', `<i class="fas fa-info-circle"></i> ${langData.menu.about}`);
         
         console.log('语言应用完成:', langCode);
     },
