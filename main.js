@@ -548,11 +548,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameStats.isMenuOpen = true;
         
 
-        
+        gameState.wasPausedBeforeMenu = gameState.isPaused;
         // 暂停游戏（如果正在运行）
         if (!gameState.isPaused && !gameState.isGameOver) {
-            gameState.wasPausedByMenu = false; // 标记菜单导致的暂停
-            pauseGame();
+            pauseGameByMenu();
         }
     }
 
@@ -563,12 +562,31 @@ document.addEventListener('DOMContentLoaded', () => {
         gameStats.isMenuOpen = false;
         
         
-        // 如果菜单导致暂停，恢复游戏
-        if (gameState.wasPausedByMenu === false && !gameState.isGameOver) {
-            resumeGame();
+        // 如果菜单暂停了游戏，恢复游戏
+        if (gameState.pausedByMenu && !gameState.isGameOver) {
+            resumeGameFromMenu(); // 修改：使用专门的函数
         }
+        
+        // 重置状态
+        gameState.pausedByMenu = false;
     }
 
+    // 专门的菜单暂停函数
+    function pauseGameByMenu() {
+        gameState.pausedByMenu = true; // 新增：标记是菜单暂停的
+        gameState.isPaused = true;
+        Runner.stop(runner);
+        
+    }
+
+    // 专门的菜单恢复函数
+    function resumeGameFromMenu() {
+        gameState.pausedByMenu = false;
+        gameState.isPaused = false;
+        Runner.run(runner, engine);
+    
+    }
+    
     // 切换菜单
     function toggleMenu() {
         if (gameStats.isMenuOpen) {
@@ -580,13 +598,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 暂停游戏（用于菜单）
     function pauseGame() {
-        gameState.wasPausedByMenu = true;
-        gameState.isPaused = true;
-        Runner.stop(runner);
-        pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        gameState.isPaused = !gameState.isPaused; // 切换状态
         
-        if (gameState.isMusicOn) {
-            backgroundMusic.pause();
+        if (gameState.isPaused) {
+            Runner.stop(runner);
+            pauseBtn.innerHTML = '<i class="fas fa-play"></i> 继续';
+        } else {
+            Runner.run(runner, engine);
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暂停';
+
         }
     }
 
@@ -1136,15 +1156,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.isPaused) {
             Runner.stop(runner);
             // 暂停背景音乐
-            if (gameState.isMusicOn) {
-                backgroundMusic.pause();
-            }
+
         } else {
             Runner.run(runner, engine);
             // 继续播放背景音乐
-            if (gameState.isMusicOn) {
-                backgroundMusic.play().catch(e => console.log('背景音乐播放失败:', e));
-            }
+
         }
     });
     
