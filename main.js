@@ -738,12 +738,12 @@ document.addEventListener('DOMContentLoaded', () => {
         victoryScoreEl.textContent = gameState.score;
         
         // 播放胜利音效
-        if (gameState.isSoundOn) {
+        /*if (gameState.isSoundOn) {
             // 可以添加专门的胜利音效
             const victorySound = new Audio('assets/audio/victory.mp3');
             victorySound.volume = 0.5;
             victorySound.play().catch(e => console.log('胜利音效播放失败'));
-        }
+        }*/
         
         // 显示界面
         victoryModal.style.display = 'flex';
