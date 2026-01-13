@@ -141,7 +141,7 @@ const LanguageManager = {
         // 在 applyLanguage 方法中添加以下代码：
 
         // 更新游戏结束界面
-        this.safeUpdateElement('.game-over-modal .modal-content h2', `<i class="fas fa-trophy"></i> ${langData.game.gameOver}`);
+        /*this.safeUpdateElement('.game-over-modal .modal-content h2', `<i class="fas fa-trophy"></i> ${langData.game.gameOver}`);
         this.safeUpdateText('.final-score', `${langData.game.finalScore} `);
         this.safeUpdateText('.highest-score', `${langData.game.highestScore} `);
 
@@ -149,7 +149,7 @@ const LanguageManager = {
         const watermelonText = document.querySelector('.fruit-stats p');
         if (watermelonText) {
             watermelonText.innerHTML = `${langData.game.watermelonCount} <span id="watermelon-count">0</span> ${langData.game.watermelonUnit}`;
-        }
+        }*/
 
         // 更新再玩一次按钮
         this.safeUpdateElement('#play-again-btn', `<i class="fas fa-play"></i> ${langData.game.playAgain}`);
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== Matter.js 初始化 ==========
     const engine = Engine.create();
-    engine.gravity.y = 0.8;  // 重力值，可以调整
+    engine.gravity.y = 0.5;  // 重力值，可以调整
     engine.gravity.x = 0;
     engine.gravity.scale = 0.003;
 
