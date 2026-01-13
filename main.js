@@ -142,16 +142,8 @@ const LanguageManager = {
 
         // 更新游戏结束界面
         this.safeUpdateElement('.game-over-modal .modal-content h2', `<i class="fas fa-trophy"></i> ${langData.game.gameOver}`);
-        const updateScoreLabel = (selector, langText) => {
-            const element = document.querySelector(selector);
-            if (element) {
-                const scoreValue = element.querySelector('span[id]')?.textContent || '0';
-                element.innerHTML = `${langText}: <span id="${element.querySelector('span[id]')?.id || 'score'}">${scoreValue}</span>`;
-            }
-        };
-
-        updateScoreLabel('.final-score', langData.game.finalScore);
-        updateScoreLabel('.highest-score', langData.game.highestScore);
+        this.safeUpdateText('.final-score', `${langData.game.finalScore} `);
+        this.safeUpdateText('.highest-score', `${langData.game.highestScore} `);
 
         // 更新 watermelon 计数文本
         const watermelonText = document.querySelector('.fruit-stats p');
